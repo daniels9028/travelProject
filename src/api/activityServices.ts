@@ -1,5 +1,5 @@
 import axios from "../axios/axios"
-import { ActivityByCategoryIdCredentials, ActivityByIdCredentials, CreateActivityCredentials, UpdateActivityCredentials } from "../types/activity/credentials"
+import { ActivityByCategoryIdCredentials, ActivityByIdCredentials, CreateActivityCredentials, UpdateActivityCredentials } from "../types/activity/credential"
 import { ActivityByCategoryIdResponse, ActivityByIdResponse, AllActivityResponse, CreateActivityResponse, DeleteActivityResponse, UpdateActivityResponse } from "../types/activity/response"
 import { DeleteCategoryCredentials } from "../types/category/credential"
 
