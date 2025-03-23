@@ -1,4 +1,4 @@
-import axios from "../axios/axios"
+import axios from "./axios"
 import { GeneratePaymentMethodResponse, PaymentMethodResponse } from "../types/payment/response"
 
 const paymentMethodService = async (): Promise<PaymentMethodResponse> => {

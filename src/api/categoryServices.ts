@@ -1,4 +1,4 @@
-import axios from "../axios/axios"
+import axios from "./axios"
 import { CategoryByIdCredentials, CreateCategoryCredentials, DeleteCategoryCredentials, UpdateCategoryCredentials } from "../types/category/credential"
 import { AllCategoryResponse, CategoryByIdResponse, CreateCategoryResponse, DeleteCategoryResponse, UpdateCategoryResponse } from "../types/category/response"
 

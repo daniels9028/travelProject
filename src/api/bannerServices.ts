@@ -1,4 +1,4 @@
-import axios from "../axios/axios";
+import axios from "./axios";
 import { BannerByIdCredentials, CreateBannerCredentials, DeleteBannerCredentials, UpdateBannerCredentials } from "../types/banner/credential";
 import { AllBannerResponse, BannerByIdResponse, CreateBannerResponse, DeleteBannerResponse, UpdateBannerResponse } from "../types/banner/response";
 

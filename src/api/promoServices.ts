@@ -1,4 +1,4 @@
-import axios from "../axios/axios"
+import axios from "./axios"
 import { CreatePromoCredentials, DeletePromoCredentials, PromoByIdCredentials, UpdatePromoCredentials } from "../types/promo/credential"
 import { AllPromoResponse, CreatePromoResponse, DeletePromoResponse, PromoByIdResponse, UpdatePromoResponse } from "../types/promo/response"
 

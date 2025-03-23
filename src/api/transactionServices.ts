@@ -1,4 +1,4 @@
-import axios from "../axios/axios"
+import axios from "./axios"
 import { CancelTransactionCredentials, CreateTransactionCredentials, TransactionByIdCredentials, UpdateTransactionProofPaymentCredentials, UpdateTransactionStatusCredentials } from "../types/transaction/credential"
 import { AllTransactionResponse, CancelTransactionResponse, CreateTransactionResponse, MyTransactionResponse, TransactionByIdResponse, UpdateTransactionProofPaymentResponse, UpdateTransactionStatusResponse } from "../types/transaction/response"
 

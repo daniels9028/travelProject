@@ -1,4 +1,4 @@
-import axios from "../axios/axios"
+import axios from "./axios"
 import { AddCartCredentials, DeleteCartCredentials, UpdateCartCredentials } from "../types/cart/credential"
 import { AddCartResponse, AllCartResponse, DeleteCartResponse, UpdateCartResponse } from "../types/cart/response"
 
