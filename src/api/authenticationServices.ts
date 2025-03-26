@@ -11,13 +11,17 @@ import {
   LogoutResponse,
 } from "../types/authentication/response";
 
-const registerUserService = async (credentials: RegisterCredentials): Promise<RegisterResponse> => {
+const registerUserService = async (
+  credentials: RegisterCredentials
+): Promise<RegisterResponse> => {
   const response = await axios.post<RegisterResponse>("register", credentials);
 
   return response.data;
 };
 
-const loginUserService = async (credentials: LoginCredentials): Promise<LoginResponse> => {
+const loginUserService = async (
+  credentials: LoginCredentials
+): Promise<LoginResponse> => {
   const response = await axios.post<LoginResponse>("login", credentials);
 
   return response.data;
