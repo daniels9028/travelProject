@@ -1,44 +1,97 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import categoryServices from "../../api/categoryServices";
-import { CategoryByIdCredentials, CreateCategoryCredentials, DeleteCategoryCredentials, UpdateCategoryCredentials } from "../../types/category/credential";
+import {
+  CategoryByIdCredentials,
+  CreateCategoryCredentials,
+  DeleteCategoryCredentials,
+  UpdateCategoryCredentials,
+} from "../../types/category/credential";
+import {
+  AllCategoryResponse,
+  CategoryByIdResponse,
+  CreateCategoryResponse,
+  DeleteCategoryResponse,
+  UpdateCategoryResponse,
+} from "../../types/category/response";
+import { AxiosError } from "axios";
 
-export const createCategoryThunk = createAsyncThunk("category/create-category", async (credentials: CreateCategoryCredentials, { rejectWithValue }) => {
-    try {
-        return await categoryServices.createCategoryService(credentials)
-    } catch (error) {
-        return rejectWithValue(error || "Error when create category")
-    }
-})
+export const createCategoryThunk = createAsyncThunk<
+  CreateCategoryResponse,
+  CreateCategoryCredentials,
+  { rejectValue: string }
+>("category/create-category", async (credentials, { rejectWithValue }) => {
+  try {
+    return await categoryServices.createCategoryService(credentials);
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message?: string }>;
 
-export const updateCategoryThunk = createAsyncThunk("category/update-category", async (credentials: UpdateCategoryCredentials, { rejectWithValue }) => {
-    try {
-        return await categoryServices.updateCategoryService(credentials)
-    } catch (error) {
-        return rejectWithValue(error || "Error when update category")
-    }
-})
+    return rejectWithValue(
+      axiosError.response?.data.message || "Error when create category"
+    );
+  }
+});
 
-export const deleteCategoryThunk = createAsyncThunk("category/delete-category", async (credentials: DeleteCategoryCredentials, { rejectWithValue }) => {
-    try {
-        return await categoryServices.deleteCategoryService(credentials)
-    } catch (error) {
-        return rejectWithValue(error || "Error when delete category")
-    }
-})
+export const updateCategoryThunk = createAsyncThunk<
+  UpdateCategoryResponse,
+  UpdateCategoryCredentials,
+  { rejectValue: string }
+>("category/update-category", async (credentials, { rejectWithValue }) => {
+  try {
+    return await categoryServices.updateCategoryService(credentials);
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message?: string }>;
 
-export const allCategoryThunk = createAsyncThunk("category/all-category", async (_, { rejectWithValue }) => {
-    try {
-        return await categoryServices.allCategoryService()
-    } catch (error) {
-        return rejectWithValue(error || "Error when get all category")
-    }
-})
+    return rejectWithValue(
+      axiosError.response?.data.message || "Error when update category"
+    );
+  }
+});
 
-export const categoryByIdThunk = createAsyncThunk("category/category-by-id", async (credentials: CategoryByIdCredentials, { rejectWithValue }) => {
-    try {
-        return await categoryServices.categoryByIdService(credentials)
-    } catch (error) {
-        return rejectWithValue(error || "Error when get category by id")
-    }
-})
+export const deleteCategoryThunk = createAsyncThunk<
+  DeleteCategoryResponse,
+  DeleteCategoryCredentials,
+  { rejectValue: string }
+>("category/delete-category", async (credentials, { rejectWithValue }) => {
+  try {
+    return await categoryServices.deleteCategoryService(credentials);
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message?: string }>;
+
+    return rejectWithValue(
+      axiosError.response?.data.message || "Error when delete category"
+    );
+  }
+});
+
+export const allCategoryThunk = createAsyncThunk<
+  AllCategoryResponse,
+  void,
+  { rejectValue: string }
+>("category/all-category", async (_, { rejectWithValue }) => {
+  try {
+    return await categoryServices.allCategoryService();
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message?: string }>;
+
+    return rejectWithValue(
+      axiosError.response?.data.message || "Error when get all category"
+    );
+  }
+});
+
+export const categoryByIdThunk = createAsyncThunk<
+  CategoryByIdResponse,
+  CategoryByIdCredentials,
+  { rejectValue: string }
+>("category/category-by-id", async (credentials, { rejectWithValue }) => {
+  try {
+    return await categoryServices.categoryByIdService(credentials);
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message?: string }>;
+
+    return rejectWithValue(
+      axiosError.response?.data.message || "Error when get category by id"
+    );
+  }
+});

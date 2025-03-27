@@ -4,6 +4,7 @@ import authenticationReducer from "./features/authenticationSlices";
 import userReducer from "./features/userSlices";
 import bannerReducer from "./features/bannerSlices";
 import promoReducer from "./features/promoSlices";
+import categoryReducer from "./features/categorySlices";
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     user: userReducer,
     banner: bannerReducer,
     promo: promoReducer,
+    category: categoryReducer,
   },
 });
 
