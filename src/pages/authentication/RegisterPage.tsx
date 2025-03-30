@@ -9,6 +9,7 @@ import { registerUserThunk } from "../../store/thunks/authenticationThunks";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { registerSchema } from "../../zod/authentication/registerSchema";
+import useRoleRedirect from "../../hooks/useRoleRedirect";
 
 const RegisterPage = () => {
   const {
@@ -40,6 +41,8 @@ const RegisterPage = () => {
       toast.info(message.register);
     }
   }, [message.register]);
+
+  useRoleRedirect();
 
   return (
     <div className="w-full min-h-screen bg-gray-100">

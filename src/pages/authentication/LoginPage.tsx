@@ -9,6 +9,8 @@ import { AppDispatch, RootState } from "../../store/store";
 import { loginUserThunk } from "../../store/thunks/authenticationThunks";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
+import { getLoggedUserThunk } from "../../store/thunks/userThunks";
+import useRoleRedirect from "../../hooks/useRoleRedirect";
 
 const LoginPage = () => {
   const {
@@ -19,14 +21,14 @@ const LoginPage = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const dispacth = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>();
 
   const { loading, message } = useSelector(
     (state: RootState) => state.authentication
   );
 
   const onSubmit = (data: any) => {
-    dispacth(loginUserThunk(data));
+    dispatch(loginUserThunk(data)).then((_) => dispatch(getLoggedUserThunk()));
   };
 
   useEffect(() => {
@@ -34,6 +36,8 @@ const LoginPage = () => {
       toast.info(message.login);
     }
   }, [message.login]);
+
+  useRoleRedirect();
 
   return (
     <div className="w-full min-h-screen bg-gray-100">

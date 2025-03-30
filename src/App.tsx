@@ -4,13 +4,18 @@ import LandingPage from "./pages/LandingPage";
 import RegisterPage from "./pages/authentication/RegisterPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import AdminDashboard from "./pages/AdminDashboard";
 
 const App = () => {
   return (
     <Router>
       <ToastContainer />
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>
