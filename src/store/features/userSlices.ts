@@ -69,8 +69,6 @@ const handleAsyncCases = <T extends UserState>(
       if (key === "allUser") {
         state.allUsers = action.payload.data as User[];
       }
-
-      console.log(action.payload);
     })
     .addCase(thunk.rejected, (state, action) => {
       state.loading[key] = false;

@@ -57,8 +57,6 @@ const handleAsyncCases = <T extends TransactionState>(
       state.loading[key] = false;
       state.message[key] = (payload.message as string) ?? null;
 
-      console.log(payload);
-
       if (key === "transactionById")
         state.selectedTransaction = (payload.data as Transaction) ?? null;
 

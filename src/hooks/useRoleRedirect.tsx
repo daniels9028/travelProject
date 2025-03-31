@@ -12,7 +12,7 @@ const useRoleRedirect = () => {
 
   useEffect(() => {
     if (token && loggedUser?.role) {
-      if (loggedUser.role === "admin") navigate("/admin-dashboard");
+      if (loggedUser.role === "admin") navigate("/dashboard");
       else if (loggedUser.role === "user") navigate("/");
     }
   }, [token, loggedUser, navigate]);

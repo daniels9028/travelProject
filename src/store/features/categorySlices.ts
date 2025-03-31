@@ -49,8 +49,6 @@ const handleAsyncCases = <T extends CategoryState>(
       state.loading[key] = false;
       state.message[key] = payload.message as string;
 
-      console.log(payload);
-
       if (key === "allCategory") {
         state.category = payload.data as Category[];
       }
