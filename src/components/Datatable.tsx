@@ -21,18 +21,23 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PlusCircle } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  title?: string;
+  add?: boolean;
+  addTitle?: string;
+  handleAdd?: () => void;
   search: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  title,
+  add,
+  addTitle,
+  handleAdd,
   search,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -54,7 +59,6 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <div className="flex lg:flex-row flex-col justify-between items-center py-4 gap-2">
-        <h2 className="text-xl tracking-wide font-bold">{title}</h2>
         <Input
           placeholder="Search..."
           value={(table.getColumn(search)?.getFilterValue() as string) ?? ""}
@@ -63,6 +67,12 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+        {add && (
+          <Button onClick={handleAdd}>
+            <PlusCircle />
+            {addTitle}
+          </Button>
+        )}
       </div>
       <div className="rounded-md border">
         <Table>

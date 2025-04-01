@@ -9,6 +9,7 @@ import activityReducer from "./features/activitySlices";
 import paymentReducer from "./features/paymentSlices";
 import cartReducer from "./features/cartSlices";
 import transactionReducer from "./features/transactionSlices";
+import uploadReducer from "./features/uploadSlices";
 
 export const store = configureStore({
   reducer: {
@@ -21,6 +22,7 @@ export const store = configureStore({
     payment: paymentReducer,
     cart: cartReducer,
     transaction: transactionReducer,
+    upload: uploadReducer,
   },
 });
 

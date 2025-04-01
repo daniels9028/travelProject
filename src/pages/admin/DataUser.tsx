@@ -7,32 +7,36 @@ import { AppDispatch, RootState } from "@/store/store";
 import { getAllUserThunk } from "@/store/thunks/userThunks";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const DataUser = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { allUsers } = useSelector((state: RootState) => state.user);
+  const { allUsers, message } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     dispatch(getAllUserThunk());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (message.updateUserRole) {
+      toast.info(message.updateUserRole);
+    }
+
+    dispatch(getAllUserThunk());
+  }, [message.updateUserRole]);
+
   return (
     <SidebarProvider>
       <AppSidebar variant="inset" />
       <SidebarInset>
-        <SiteHeader title="Data User" />
+        <SiteHeader title="User Management" />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               {/* <DataTable data={data} /> */}
               <div className="px-4">
-                <DataTable
-                  columns={columns}
-                  data={allUsers}
-                  title="User Management"
-                  search="name"
-                />
+                <DataTable columns={columns} data={allUsers} search="name" />
               </div>
             </div>
           </div>

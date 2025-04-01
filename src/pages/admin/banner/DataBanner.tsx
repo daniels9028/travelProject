@@ -7,11 +7,18 @@ import { AppDispatch, RootState } from "@/store/store";
 import { allBannerThunk } from "@/store/thunks/bannerThunks";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const DataBanner = () => {
   const dispatch = useDispatch<AppDispatch>();
 
+  const navigate = useNavigate();
+
   const { banner } = useSelector((state: RootState) => state.banner);
+
+  const handleAddBanner = () => {
+    navigate("/dashboard/banners/add-banner");
+  };
 
   useEffect(() => {
     dispatch(allBannerThunk());
@@ -30,7 +37,9 @@ const DataBanner = () => {
                 <DataTable
                   columns={columns}
                   data={banner}
-                  title="Banner Management"
+                  add={true}
+                  addTitle="Add Banner"
+                  handleAdd={handleAddBanner}
                   search="name"
                 />
               </div>

@@ -66,7 +66,11 @@ const handleAsyncCases = <T extends BannerState>(
 const bannerSlice = createSlice({
   name: "banner",
   initialState,
-  reducers: {},
+  reducers: {
+    clearBannerMessage: (state, { payload }) => {
+      state.message[payload.key] = null;
+    },
+  },
   extraReducers: (builder) => {
     handleAsyncCases(builder, createBannerThunk, "createBanner");
     handleAsyncCases(builder, updateBannerThunk, "updateBanner");
@@ -76,4 +80,5 @@ const bannerSlice = createSlice({
   },
 });
 
+export const { clearBannerMessage } = bannerSlice.actions;
 export default bannerSlice.reducer;

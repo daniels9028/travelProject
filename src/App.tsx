@@ -7,11 +7,12 @@ import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import DataUser from "./pages/admin/DataUser";
-import DataBanner from "./pages/admin/DataBanner";
+import DataBanner from "./pages/admin/banner/DataBanner";
 import DataPromo from "./pages/admin/DataPromo";
 import DataCategory from "./pages/admin/DataCategory";
 import DataActivity from "./pages/admin/DataActivity";
 import DataTransaction from "./pages/admin/DataTransaction";
+import AddBanner from "./pages/admin/banner/AddBanner";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="/dashboard" element={<AdminDashboard />} />
           <Route path="/dashboard/users" element={<DataUser />} />
           <Route path="/dashboard/banners" element={<DataBanner />} />
+          <Route path="/dashboard/banners/add-banner" element={<AddBanner />} />
           <Route path="/dashboard/promos" element={<DataPromo />} />
           <Route path="/dashboard/categories" element={<DataCategory />} />
           <Route path="/dashboard/activities" element={<DataActivity />} />
