@@ -23,7 +23,6 @@ import { AppDispatch, RootState } from "@/store/store";
 import { uploadImageThunk } from "@/store/thunks/uploadThunks";
 import {
   bannerByIdThunk,
-  createBannerThunk,
   updateBannerThunk,
 } from "@/store/thunks/bannerThunks";
 import { clearBannerMessage } from "@/store/features/bannerSlices";

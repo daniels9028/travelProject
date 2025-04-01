@@ -3,18 +3,20 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { DataTable } from "@/components/Datatable";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { clearBannerMessage } from "@/store/features/bannerSlices";
 import { AppDispatch, RootState } from "@/store/store";
 import { allBannerThunk } from "@/store/thunks/bannerThunks";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const DataBanner = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const navigate = useNavigate();
 
-  const { banner } = useSelector((state: RootState) => state.banner);
+  const { banner, message } = useSelector((state: RootState) => state.banner);
 
   const handleAddBanner = () => {
     navigate("/dashboard/banners/add-banner");
@@ -23,6 +25,15 @@ const DataBanner = () => {
   useEffect(() => {
     dispatch(allBannerThunk());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (message.deleteBanner) {
+      toast.success(message.deleteBanner);
+    }
+
+    dispatch(allBannerThunk());
+    dispatch(clearBannerMessage({ key: "deleteBanner" }));
+  }, [message.deleteBanner]);
 
   return (
     <SidebarProvider>
