@@ -66,7 +66,11 @@ const handleAsyncCases = <T extends CategoryState>(
 const categorySlice = createSlice({
   name: "category",
   initialState,
-  reducers: {},
+  reducers: {
+    clearMessage: (state, { payload }) => {
+      state.message[payload.key] = null;
+    },
+  },
   extraReducers: (builder) => {
     handleAsyncCases(builder, createCategoryThunk, "createCategory");
     handleAsyncCases(builder, updateCategoryThunk, "updateCategory");
@@ -76,4 +80,5 @@ const categorySlice = createSlice({
   },
 });
 
+export const { clearMessage } = categorySlice.actions;
 export default categorySlice.reducer;
