@@ -13,6 +13,7 @@ import DataCategory from "./pages/admin/DataCategory";
 import DataActivity from "./pages/admin/DataActivity";
 import DataTransaction from "./pages/admin/DataTransaction";
 import AddBanner from "./pages/admin/banner/AddBanner";
+import EditBanner from "./pages/admin/banner/EditBanner";
 
 const App = () => {
   return (
@@ -23,8 +24,11 @@ const App = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/dashboard" element={<AdminDashboard />} />
           <Route path="/dashboard/users" element={<DataUser />} />
+
           <Route path="/dashboard/banners" element={<DataBanner />} />
           <Route path="/dashboard/banners/add-banner" element={<AddBanner />} />
+          <Route path="/dashboard/banners/:id/edit" element={<EditBanner />} />
+
           <Route path="/dashboard/promos" element={<DataPromo />} />
           <Route path="/dashboard/categories" element={<DataCategory />} />
           <Route path="/dashboard/activities" element={<DataActivity />} />
