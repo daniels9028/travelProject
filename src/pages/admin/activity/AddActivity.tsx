@@ -1,43 +1,11 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { AppDispatch, RootState } from "@/store/store";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link, useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { uploadImageThunk } from "@/store/thunks/uploadThunks";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  activityDefaultValues,
-  activitySchema,
-} from "@/zod/activity/activitySchema";
-import { createActivityThunk } from "@/store/thunks/activityThunks";
-import { clearActivityMessage } from "@/store/features/activitySlices";
-
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { allCategoryThunk } from "@/store/thunks/categoryThunks";
+import { Link } from "react-router-dom";
 import { Plus, X } from "lucide-react";
-
 import {
   Carousel,
   CarouselContent,
@@ -45,96 +13,20 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import FormInput from "@/components/FormInput";
+import useActivityHooks from "@/hooks/useActivityHooks";
+import FormSelect from "@/components/FormSelect";
 
 const AddActivity = () => {
-  const form = useForm({
-    resolver: zodResolver(activitySchema),
-    defaultValues: activityDefaultValues,
-  });
-
-  const dispatch = useDispatch<AppDispatch>();
-
-  const navigate = useNavigate();
-
-  const { message } = useSelector((state: RootState) => state.activity);
-
-  const { category } = useSelector((state: RootState) => state.category);
-
-  const [fileInputs, setFileInputs] = useState<
-    Array<{ id: number; url: string }>
-  >([]);
-
-  const addFileInput = () => {
-    setFileInputs([...fileInputs, { id: Date.now(), url: "" }]);
-  };
-
-  const handleFileChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-    id: number
-  ) => {
-    if (e.target.files && e.target.files[0]) {
-      const inputFile = e.target.files[0];
-
-      if (!inputFile.type.startsWith("image/")) {
-        toast.info("Only image");
-        return;
-      }
-
-      if (inputFile.size > 1 * 1024 * 1024) {
-        toast.info("Maks 1MB");
-        return;
-      }
-
-      const { url } = await dispatch(
-        uploadImageThunk({ image: inputFile })
-      ).unwrap();
-
-      setFileInputs((prevFileInputs) =>
-        prevFileInputs.map((file) =>
-          file.id === id ? { ...file, url: url } : file
-        )
-      );
-    }
-  };
-
-  const removeFileInput = (id: any) => {
-    setFileInputs(fileInputs.filter((input) => input.id !== id));
-  };
-
-  const onSubmit = (data: any) => {
-    if (fileInputs.length === 0) {
-      toast.error("Please upload image!");
-      return;
-    }
-
-    const imageUrls = fileInputs.map((file) => file.url);
-
-    const emptyCount = imageUrls.filter((item) => item === "").length;
-
-    if (emptyCount > 0) {
-      toast.error("Image dont accept empty value!");
-      return;
-    }
-
-    dispatch(createActivityThunk({ ...data, imageUrls: imageUrls }))
-      .unwrap()
-      .then((_) => {
-        setTimeout(() => {
-          navigate("/dashboard/activities");
-        }, 1000);
-      });
-  };
-
-  useEffect(() => {
-    dispatch(allCategoryThunk());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (message.createActivity) {
-      toast.success(message.createActivity);
-      dispatch(clearActivityMessage({ key: "createActivity" }));
-    }
-  }, [message.createActivity]);
+  const {
+    form,
+    category,
+    fileInputs,
+    addFileInput,
+    handleFileChange,
+    removeFileInput,
+    onSubmit,
+  } = useActivityHooks();
 
   return (
     <SidebarProvider>
@@ -150,7 +42,7 @@ const AddActivity = () => {
                     onSubmit={form.handleSubmit(onSubmit)}
                     className="w-2/3 space-y-6"
                   >
-                    <Carousel className="w-full h-[300px]">
+                    <Carousel className="w-full h-[300px] bg-gray-200 rounded-lg">
                       <CarouselContent>
                         {fileInputs.map((image) => (
                           <CarouselItem key={image.id}>
@@ -173,204 +65,87 @@ const AddActivity = () => {
                       <CarouselPrevious />
                       <CarouselNext />
                     </Carousel>
-                    <FormField
+                    <FormSelect
                       control={form.control}
                       name="categoryId"
-                      render={({}) => (
-                        <FormItem>
-                          <FormLabel>Category</FormLabel>
-                          <FormControl>
-                            <Controller
-                              control={form.control}
-                              name="categoryId"
-                              render={({ field }) => (
-                                <Select
-                                  onValueChange={field.onChange}
-                                  value={field.value}
-                                >
-                                  <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Select a category" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectGroup>
-                                      {category.map((item) => (
-                                        <SelectItem
-                                          value={item.id}
-                                          key={item.id}
-                                        >
-                                          {item.name}
-                                        </SelectItem>
-                                      ))}
-                                    </SelectGroup>
-                                  </SelectContent>
-                                </Select>
-                              )}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+                      datas={category}
                     />
-                    <FormField
-                      control={form.control}
+                    <FormInput
                       name="title"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Title</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Enter promo title" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
+                      label="Title"
                       control={form.control}
+                      placeholder="Enter activity title"
+                      tipe="text"
+                    />
+                    <FormInput
                       name="description"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Description</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Enter promo description"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
+                      label="Description"
                       control={form.control}
+                      placeholder="Enter activity description"
+                      tipe="textarea"
+                    />
+                    <FormInput
                       name="price"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Price</FormLabel>
-                          <FormControl>
-                            <Input type="number" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
+                      label="Price"
                       control={form.control}
+                      number={true}
+                      tipe="text"
+                    />
+                    <FormInput
                       name="price_discount"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Price Discount</FormLabel>
-                          <FormControl>
-                            <Input type="number" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
+                      label="Price Discount"
                       control={form.control}
+                      number={true}
+                      tipe="text"
+                    />
+                    <FormInput
                       name="rating"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Rating</FormLabel>
-                          <FormControl>
-                            <Input type="number" min={1} max={5} {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
+                      label="Rating"
                       control={form.control}
+                      number={true}
+                      tipe="text"
+                    />
+                    <FormInput
                       name="total_reviews"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Total Reviews</FormLabel>
-                          <FormControl>
-                            <Input type="number" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
+                      label="Total Reviews"
                       control={form.control}
+                      number={true}
+                      tipe="text"
+                    />
+                    <FormInput
                       name="facilities"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Facilities</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Enter activity facilities"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
+                      label="Facilities"
                       control={form.control}
+                      placeholder="Enter activity facilities"
+                      tipe="textarea"
+                    />
+                    <FormInput
                       name="address"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Address</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Enter activity address"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
+                      label="Address"
                       control={form.control}
+                      placeholder="Enter activity address"
+                      tipe="textarea"
+                    />
+                    <FormInput
                       name="province"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Province</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Enter activity province"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
+                      label="Province"
                       control={form.control}
+                      placeholder="Enter activity province"
+                      tipe="text"
+                    />
+                    <FormInput
                       name="city"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>City</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Enter activity city"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
+                      label="City"
                       control={form.control}
+                      placeholder="Enter activity city"
+                      tipe="text"
+                    />
+                    <FormInput
                       name="location_maps"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Location Maps</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Enter activity location maps"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+                      label="Location Maps"
+                      control={form.control}
+                      placeholder="Enter activity location maps"
+                      tipe="textarea"
                     />
                     <div className="space-y-4 p-4 border rounded-lg w-full">
                       {fileInputs.map(({ id }) => (
