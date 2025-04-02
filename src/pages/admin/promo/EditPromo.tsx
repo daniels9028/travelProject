@@ -17,15 +17,19 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { uploadImageThunk } from "@/store/thunks/uploadThunks";
 import { Textarea } from "@/components/ui/textarea";
-import { createPromoThunk } from "@/store/thunks/promoThunks";
+import { promoByIdThunk, updatePromoThunk } from "@/store/thunks/promoThunks";
 import { clearPromoMessage } from "@/store/features/promoSlices";
 
-const AddPromo = () => {
+const EditPromo = () => {
+  const params = useParams();
+
+  const id = params.id || "";
+
   const form = useForm({
     resolver: zodResolver(promoSchema),
     defaultValues: {
@@ -39,16 +43,20 @@ const AddPromo = () => {
     },
   });
 
+  const { reset } = form;
+
   const dispatch = useDispatch<AppDispatch>();
 
   const navigate = useNavigate();
 
-  const { message } = useSelector((state: RootState) => state.promo);
+  const { message, selectedPromo } = useSelector(
+    (state: RootState) => state.promo
+  );
 
   const [image, setImage] = useState<File | null>(null);
 
   const onSubmit = (data: any) => {
-    dispatch(createPromoThunk(data))
+    dispatch(updatePromoThunk({ ...data, id: id }))
       .unwrap()
       .then((_) => {
         setTimeout(() => {
@@ -58,17 +66,35 @@ const AddPromo = () => {
   };
 
   useEffect(() => {
-    if (message.createPromo) {
-      toast.success(message.createPromo);
-      dispatch(clearPromoMessage({ key: "createPromo" }));
+    dispatch(promoByIdThunk({ id: id }));
+  }, [id, dispatch]);
+
+  useEffect(() => {
+    if (selectedPromo) {
+      reset({
+        title: selectedPromo.title,
+        description: selectedPromo.description,
+        terms_condition: selectedPromo.terms_condition,
+        promo_code: selectedPromo.promo_code,
+        promo_discount_price: selectedPromo.promo_discount_price,
+        minimum_claim_price: selectedPromo.minimum_claim_price,
+        imageUrl: selectedPromo.imageUrl,
+      });
     }
-  }, [message.createPromo]);
+  }, [selectedPromo, reset]);
+
+  useEffect(() => {
+    if (message.updatePromo) {
+      toast.success(message.updatePromo);
+      dispatch(clearPromoMessage({ key: "updatePromo" }));
+    }
+  }, [message.updatePromo]);
 
   return (
     <SidebarProvider>
       <AppSidebar variant="inset" />
       <SidebarInset>
-        <SiteHeader title="Add Promo" />
+        <SiteHeader title="Edit Promo" />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
@@ -82,6 +108,12 @@ const AddPromo = () => {
                       {image ? (
                         <img
                           src={URL.createObjectURL(image)}
+                          alt="preview_image"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : selectedPromo ? (
+                        <img
+                          src={selectedPromo.imageUrl}
                           alt="preview_image"
                           className="w-full h-full object-cover"
                         />
@@ -242,4 +274,4 @@ const AddPromo = () => {
   );
 };
 
-export default AddPromo;
+export default EditPromo;

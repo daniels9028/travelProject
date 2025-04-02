@@ -66,7 +66,11 @@ const handleAsyncCases = <T extends PromoState>(
 const promoSlice = createSlice({
   name: "promo",
   initialState,
-  reducers: {},
+  reducers: {
+    clearPromoMessage: (state, { payload }) => {
+      state.message[payload.key] = null;
+    },
+  },
   extraReducers: (builder) => {
     handleAsyncCases(builder, createPromoThunk, "createPromo");
     handleAsyncCases(builder, updatePromoThunk, "updatePromo");
@@ -76,4 +80,5 @@ const promoSlice = createSlice({
   },
 });
 
+export const { clearPromoMessage } = promoSlice.actions;
 export default promoSlice.reducer;

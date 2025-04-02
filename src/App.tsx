@@ -17,6 +17,7 @@ import EditBanner from "./pages/admin/banner/EditBanner";
 import AddPromo from "./pages/admin/promo/AddPromo";
 import AddCategory from "./pages/admin/category/AddCategory";
 import EditCategory from "./pages/admin/category/EditCategory";
+import EditPromo from "./pages/admin/promo/EditPromo";
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
 
           <Route path="/dashboard/promos" element={<DataPromo />} />
           <Route path="/dashboard/promos/add-promo" element={<AddPromo />} />
+          <Route path="/dashboard/promos/:id/edit" element={<EditPromo />} />
 
           <Route path="/dashboard/categories" element={<DataCategory />} />
           <Route

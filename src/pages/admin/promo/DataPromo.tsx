@@ -3,18 +3,20 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { DataTable } from "@/components/Datatable";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { clearPromoMessage } from "@/store/features/promoSlices";
 import { AppDispatch, RootState } from "@/store/store";
 import { allPromoThunk } from "@/store/thunks/promoThunks";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const DataPromo = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const navigate = useNavigate();
 
-  const { promo } = useSelector((state: RootState) => state.promo);
+  const { promo, message } = useSelector((state: RootState) => state.promo);
 
   const handleAddPromo = () => {
     navigate("/dashboard/promos/add-promo");
@@ -23,6 +25,15 @@ const DataPromo = () => {
   useEffect(() => {
     dispatch(allPromoThunk());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (message.deletePromo) {
+      toast.success(message.deletePromo);
+    }
+
+    dispatch(allPromoThunk());
+    dispatch(clearPromoMessage({ key: "deletePromo" }));
+  }, [message.deletePromo]);
 
   return (
     <SidebarProvider>
