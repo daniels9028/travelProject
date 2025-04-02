@@ -19,6 +19,7 @@ import AddCategory from "./pages/admin/category/AddCategory";
 import EditCategory from "./pages/admin/category/EditCategory";
 import EditPromo from "./pages/admin/promo/EditPromo";
 import AddActivity from "./pages/admin/activity/AddActivity";
+import EditActivity from "./pages/admin/activity/EditActivity";
 
 const App = () => {
   return (
@@ -52,6 +53,10 @@ const App = () => {
           <Route
             path="/dashboard/activities/add-activity"
             element={<AddActivity />}
+          />
+          <Route
+            path="/dashboard/activities/:id/edit"
+            element={<EditActivity />}
           />
 
           <Route path="/dashboard/transactions" element={<DataTransaction />} />

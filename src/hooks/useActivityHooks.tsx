@@ -1,6 +1,8 @@
-import { clearActivityMessage } from "@/store/features/activitySlices";
 import { AppDispatch, RootState } from "@/store/store";
-import { createActivityThunk } from "@/store/thunks/activityThunks";
+import {
+  createActivityThunk,
+  updateActivityThunk,
+} from "@/store/thunks/activityThunks";
 import { allCategoryThunk } from "@/store/thunks/categoryThunks";
 import { uploadImageThunk } from "@/store/thunks/uploadThunks";
 import {
@@ -14,17 +16,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const useActivityHooks = () => {
+const useActivityHooks = ({ id }: { id?: string | null }) => {
   const form = useForm({
     resolver: zodResolver(activitySchema),
     defaultValues: activityDefaultValues,
   });
 
+  const { reset } = form;
+
   const dispatch = useDispatch<AppDispatch>();
 
   const navigate = useNavigate();
 
-  const { message } = useSelector((state: RootState) => state.activity);
+  const { message, selectedActivity } = useSelector(
+    (state: RootState) => state.activity
+  );
 
   const { category } = useSelector((state: RootState) => state.category);
 
@@ -40,6 +46,8 @@ const useActivityHooks = () => {
     e: React.ChangeEvent<HTMLInputElement>,
     id: number
   ) => {
+    e.preventDefault();
+
     if (e.target.files && e.target.files[0]) {
       const inputFile = e.target.files[0];
 
@@ -84,34 +92,42 @@ const useActivityHooks = () => {
       return;
     }
 
-    dispatch(createActivityThunk({ ...data, imageUrls: imageUrls }))
-      .unwrap()
-      .then((_) => {
-        setTimeout(() => {
-          navigate("/dashboard/activities");
-        }, 1000);
-      });
+    if (id) {
+      dispatch(updateActivityThunk({ ...data, imageUrls: imageUrls, id: id }))
+        .unwrap()
+        .then((_) => {
+          setTimeout(() => {
+            navigate("/dashboard/activities");
+          }, 1000);
+        });
+    } else {
+      dispatch(createActivityThunk({ ...data, imageUrls: imageUrls }))
+        .unwrap()
+        .then((_) => {
+          setTimeout(() => {
+            navigate("/dashboard/activities");
+          }, 1000);
+        });
+    }
   };
 
   useEffect(() => {
     dispatch(allCategoryThunk());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (message.createActivity) {
-      toast.success(message.createActivity);
-      dispatch(clearActivityMessage({ key: "createActivity" }));
-    }
-  }, [message.createActivity]);
-
   return {
     form,
     category,
     fileInputs,
+    message,
+    selectedActivity,
+    dispatch,
     addFileInput,
     handleFileChange,
     removeFileInput,
     onSubmit,
+    reset,
+    setFileInputs,
   };
 };
 

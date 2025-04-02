@@ -4,7 +4,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Plus, X } from "lucide-react";
 import {
   Carousel,
@@ -17,34 +17,81 @@ import FormInput from "@/components/FormInput";
 import useActivityHooks from "@/hooks/useActivityHooks";
 import FormSelect from "@/components/FormSelect";
 import { useEffect } from "react";
-import { clearActivityMessage } from "@/store/features/activitySlices";
+import { activityByIdThunk } from "@/store/thunks/activityThunks";
 import { toast } from "react-toastify";
+import { clearActivityMessage } from "@/store/features/activitySlices";
 
-const AddActivity = () => {
+const EditActivity = () => {
+  const params = useParams();
+
+  const id = params.id || "";
+
   const {
     form,
     category,
     fileInputs,
+    selectedActivity,
     message,
     dispatch,
     addFileInput,
     handleFileChange,
     removeFileInput,
     onSubmit,
-  } = useActivityHooks({ id: null });
+    reset,
+    setFileInputs,
+  } = useActivityHooks({ id: id });
 
   useEffect(() => {
-    if (message.createActivity) {
-      toast.success(message.createActivity);
-      dispatch(clearActivityMessage({ key: "createActivity" }));
+    if (id) {
+      dispatch(
+        activityByIdThunk({
+          id: id,
+        })
+      );
     }
-  }, [message.createActivity]);
+  }, [id, dispatch]);
+
+  useEffect(() => {
+    if (!selectedActivity) return;
+
+    reset({
+      categoryId: selectedActivity.categoryId,
+      title: selectedActivity.title,
+      description: selectedActivity.description,
+      price: selectedActivity.price,
+      price_discount: selectedActivity.price_discount,
+      rating: selectedActivity.rating,
+      total_reviews: selectedActivity.total_reviews,
+      facilities: selectedActivity.facilities,
+      address: selectedActivity.address,
+      province: selectedActivity.province,
+      city: selectedActivity.city,
+      location_maps: selectedActivity.location_maps,
+    });
+
+    setFileInputs((prevFileInputs) => {
+      if (prevFileInputs.length === selectedActivity.imageUrls.length) {
+        return prevFileInputs;
+      }
+      return selectedActivity.imageUrls.map((itemFile, index) => ({
+        id: Date.now() + index,
+        url: itemFile,
+      }));
+    });
+  }, [selectedActivity, reset]);
+
+  useEffect(() => {
+    if (message.updateActivity) {
+      toast.success(message.updateActivity);
+      dispatch(clearActivityMessage({ key: "updateActivity" }));
+    }
+  }, [message.updateActivity]);
 
   return (
     <SidebarProvider>
       <AppSidebar variant="inset" />
       <SidebarInset>
-        <SiteHeader title="Add Activity" />
+        <SiteHeader title="Edit Activity" />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
@@ -74,8 +121,8 @@ const AddActivity = () => {
                           </CarouselItem>
                         ))}
                       </CarouselContent>
-                      <CarouselPrevious />
-                      <CarouselNext />
+                      <CarouselPrevious type="button" />
+                      <CarouselNext type="button" />
                     </Carousel>
                     <FormSelect
                       control={form.control}
@@ -160,24 +207,31 @@ const AddActivity = () => {
                       tipe="textarea"
                     />
                     <div className="space-y-4 p-4 border rounded-lg w-full">
-                      {fileInputs.map(({ id }) => (
-                        <div key={id} className="flex items-center space-x-2">
-                          <Input
-                            type="file"
-                            className="w-full"
-                            onChange={(e) => {
-                              handleFileChange(e, id);
-                            }}
-                            accept="image/*"
-                          />
-                          <Button
-                            variant="destructive"
-                            type="button"
-                            size="icon"
-                            onClick={() => removeFileInput(id)}
-                          >
-                            <X className="w-4 h-4" />
-                          </Button>
+                      {fileInputs.map((item, index) => (
+                        <div className="flex flex-col" key={item.id}>
+                          <div className="flex items-center space-x-2">
+                            <Input
+                              type="file"
+                              className="w-full"
+                              onChange={(e) => {
+                                handleFileChange(e, item.id);
+                              }}
+                              accept="image/*"
+                            />
+                            <Button
+                              variant="destructive"
+                              type="button"
+                              size="icon"
+                              onClick={() => removeFileInput(item.id)}
+                            >
+                              <X className="w-4 h-4" />
+                            </Button>
+                          </div>
+                          <p className="text-sm font-medium mt-1">
+                            {item.url
+                              ? "Already have image"
+                              : "No image upload"}
+                          </p>
                         </div>
                       ))}
                       <Button
@@ -217,4 +271,4 @@ const AddActivity = () => {
   );
 };
 
-export default AddActivity;
+export default EditActivity;

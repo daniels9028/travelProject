@@ -3,18 +3,22 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { DataTable } from "@/components/Datatable";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { clearActivityMessage } from "@/store/features/activitySlices";
 import { AppDispatch, RootState } from "@/store/store";
 import { allActivityThunk } from "@/store/thunks/activityThunks";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const DataActivity = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const navigate = useNavigate();
 
-  const { activity } = useSelector((state: RootState) => state.activity);
+  const { activity, message } = useSelector(
+    (state: RootState) => state.activity
+  );
 
   const handleAddActivity = () => {
     navigate("/dashboard/activities/add-activity");
@@ -23,6 +27,15 @@ const DataActivity = () => {
   useEffect(() => {
     dispatch(allActivityThunk());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (message.deleteActivity) {
+      toast.success(message.deleteActivity);
+    }
+
+    dispatch(allActivityThunk());
+    dispatch(clearActivityMessage({ key: "deleteActivity" }));
+  }, [message.deleteActivity]);
 
   return (
     <SidebarProvider>
