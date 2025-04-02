@@ -207,7 +207,7 @@ const EditActivity = () => {
                       tipe="textarea"
                     />
                     <div className="space-y-4 p-4 border rounded-lg w-full">
-                      {fileInputs.map((item, index) => (
+                      {fileInputs.map((item) => (
                         <div className="flex flex-col" key={item.id}>
                           <div className="flex items-center space-x-2">
                             <Input

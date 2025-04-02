@@ -73,27 +73,13 @@ export const columns: ColumnDef<Transaction>[] = [
   },
   {
     accessorKey: "status",
-    header: "Payment Method",
+    header: "Status",
     cell: ({ row }) => {
       const status: TransactionStatus = row.getValue("status");
 
-      console.log(status);
-
       return (
-        <p
-          className={`py-2 px-4 rounded-lg flex items-center justify-center font-medium text-xs tracking-wider ${
-            status === "success"
-              ? "text-white bg-blue-500 hover:bg-blue-700"
-              : status === "cancelled"
-              ? "text-white bg-red-500 hover:bg-red-700"
-              : "text-white bg-orange-500 hover:bg-orange-700"
-          }`}
-        >
-          {status === "success"
-            ? "SUCCESS"
-            : status === "cancelled"
-            ? "CANCELLED"
-            : "PENDING"}
+        <p className="text-white bg-gray-400 cursor-pointer hover:bg-gray-500 transition-colors p-1 capitalize rounded-lg flex items-center justify-center font-medium text-xs tracking-wider">
+          {status}
         </p>
       );
     },
