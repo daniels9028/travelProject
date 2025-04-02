@@ -4,6 +4,10 @@ import { ColumnDef } from "@tanstack/react-table";
 // You can use a Zod schema here if you want.
 import { Transaction, TransactionStatus } from "@/types/transaction/response";
 import { Payment } from "@/types/payment/response";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Edit2 } from "lucide-react";
 
 export const columns: ColumnDef<Transaction>[] = [
   {
@@ -77,10 +81,41 @@ export const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => {
       const status: TransactionStatus = row.getValue("status");
 
+      const statusColors = {
+        pending: "bg-yellow-500 hover:bg-yellow-600 text-black",
+        success: "bg-green-500 hover:bg-green-600 text-white",
+        failed: "bg-red-500 hover:bg-red-600 text-white",
+        cancelled: "bg-gray-500 hover:bg-gray-600 text-white",
+      };
+
       return (
-        <p className="text-white bg-gray-400 cursor-pointer hover:bg-gray-500 transition-colors p-1 capitalize rounded-lg flex items-center justify-center font-medium text-xs tracking-wider">
+        <p
+          className={`cursor-pointer transition-colors p-1 capitalize rounded-lg flex items-center justify-center font-medium text-xs tracking-wider 
+          ${statusColors[status] || "bg-gray-400 text-white"}`}
+        >
           {status}
         </p>
+      );
+    },
+  },
+  {
+    accessorKey: "id",
+    header: "Action",
+    cell: ({ row }) => {
+      const navigate = useNavigate();
+
+      return (
+        <div className="flex lg:flex-row flex-col gap-2 items-center justify-center">
+          <Button
+            className="cursor-pointer border border-red-500"
+            variant="outline"
+            onClick={() => {
+              navigate(`/dashboard/transactions/${row.original.id}/detail`);
+            }}
+          >
+            <Edit2 />
+          </Button>
+        </div>
       );
     },
   },
