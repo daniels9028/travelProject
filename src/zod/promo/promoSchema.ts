@@ -4,7 +4,7 @@ export const promoSchema = z.object({
   title: z
     .string()
     .min(6, "Title must be at least 6 character")
-    .nonempty("Name cannot be empty"),
+    .nonempty("Title cannot be empty"),
   description: z
     .string()
     .min(6, "Description must be at least 6 character")

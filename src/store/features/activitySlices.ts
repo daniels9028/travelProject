@@ -73,7 +73,11 @@ const handleAsyncCases = <T extends ActivityState>(
 const activitySlice = createSlice({
   name: "activity",
   initialState,
-  reducers: {},
+  reducers: {
+    clearActivityMessage: (state, { payload }) => {
+      state.message[payload.key] = null;
+    },
+  },
   extraReducers: (builder) => {
     handleAsyncCases(builder, createActivityThunk, "createActivity");
     handleAsyncCases(builder, allActivityThunk, "allActivity");
@@ -88,4 +92,5 @@ const activitySlice = createSlice({
   },
 });
 
+export const { clearActivityMessage } = activitySlice.actions;
 export default activitySlice.reducer;
