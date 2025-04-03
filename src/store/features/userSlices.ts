@@ -8,18 +8,8 @@ import {
 } from "../thunks/userThunks";
 
 interface UserState {
-  loading: {
-    loggedUser: boolean;
-    allUser: boolean;
-    updateProfile: boolean;
-    updateUserRole: boolean;
-  };
-  message: {
-    loggedUser: string | null;
-    allUser: string | null;
-    updateProfile: string | null;
-    updateUserRole: string | null;
-  };
+  loading: Record<string, boolean>;
+  message: Record<string, string | null>;
   loggedUser: User | null;
   allUsers: User[];
 }
