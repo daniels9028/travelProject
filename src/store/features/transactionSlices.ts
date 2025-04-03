@@ -75,7 +75,11 @@ const handleAsyncCases = <T extends TransactionState>(
 const transactionSlice = createSlice({
   name: "transaction",
   initialState,
-  reducers: {},
+  reducers: {
+    clearTransactionMessage: (state, { payload }) => {
+      state.message[payload.key] = null;
+    },
+  },
   extraReducers: (builder) => {
     handleAsyncCases(builder, transactionByIdThunk, "transactionById");
     handleAsyncCases(builder, myTransactionThunk, "myTransaction");
@@ -95,4 +99,5 @@ const transactionSlice = createSlice({
   },
 });
 
+export const { clearTransactionMessage } = transactionSlice.actions;
 export default transactionSlice.reducer;

@@ -4,10 +4,9 @@ import { ColumnDef } from "@tanstack/react-table";
 // You can use a Zod schema here if you want.
 import { Transaction, TransactionStatus } from "@/types/transaction/response";
 import { Payment } from "@/types/payment/response";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Edit2 } from "lucide-react";
+import { Edit2, Eye } from "lucide-react";
 
 export const columns: ColumnDef<Transaction>[] = [
   {
@@ -90,7 +89,7 @@ export const columns: ColumnDef<Transaction>[] = [
 
       return (
         <p
-          className={`cursor-pointer transition-colors p-1 capitalize rounded-lg flex items-center justify-center font-medium text-xs tracking-wider 
+          className={`cursor-pointer transition-colors p-2 capitalize rounded-lg flex items-center justify-center font-medium text-xs tracking-wider 
           ${statusColors[status] || "bg-gray-400 text-white"}`}
         >
           {status}
@@ -113,7 +112,7 @@ export const columns: ColumnDef<Transaction>[] = [
               navigate(`/dashboard/transactions/${row.original.id}/detail`);
             }}
           >
-            <Edit2 />
+            {row.original.status === "pending" ? <Edit2 /> : <Eye />}
           </Button>
         </div>
       );

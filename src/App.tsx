@@ -11,7 +11,7 @@ import DataBanner from "./pages/admin/banner/DataBanner";
 import DataPromo from "./pages/admin/promo/DataPromo";
 import DataCategory from "./pages/admin/category/DataCategory";
 import DataActivity from "./pages/admin/activity/DataActivity";
-import DataTransaction from "./pages/admin/DataTransaction";
+import DataTransaction from "./pages/admin/transaction/DataTransaction";
 import AddBanner from "./pages/admin/banner/AddBanner";
 import EditBanner from "./pages/admin/banner/EditBanner";
 import AddPromo from "./pages/admin/promo/AddPromo";
@@ -20,6 +20,7 @@ import EditCategory from "./pages/admin/category/EditCategory";
 import EditPromo from "./pages/admin/promo/EditPromo";
 import AddActivity from "./pages/admin/activity/AddActivity";
 import EditActivity from "./pages/admin/activity/EditActivity";
+import DetailTransaction from "./pages/admin/transaction/DetailTransaction";
 
 const App = () => {
   return (
@@ -60,6 +61,10 @@ const App = () => {
           />
 
           <Route path="/dashboard/transactions" element={<DataTransaction />} />
+          <Route
+            path="/dashboard/transactions/:id/detail"
+            element={<DetailTransaction />}
+          />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
