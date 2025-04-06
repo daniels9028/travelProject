@@ -1,13 +1,24 @@
+// src/routes/RoleProtectedRoute.tsx
 import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
 import { Navigate, Outlet } from "react-router-dom";
+import { RootState } from "../store/store";
 
-const ProtectedRoute = () => {
+interface RoleProtectedRouteProps {
+  allowedRoles: string[];
+}
+
+const ProtectedRoute = ({ allowedRoles }: RoleProtectedRouteProps) => {
   const { token } = useSelector((state: RootState) => state.authentication);
+  const { loggedUser } = useSelector((state: RootState) => state.user);
 
-  if (!token) return <Navigate to="/login" />;
+  if (!token) return <Navigate to="/login" replace />;
 
-  return <Outlet />;
+  if (loggedUser && allowedRoles.includes(loggedUser.role)) {
+    return <Outlet />;
+  }
+
+  // Redirect if role is not allowed
+  return <Navigate to="/" replace />;
 };
 
 export default ProtectedRoute;
