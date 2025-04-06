@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Water+Brush&display=swap&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -7,6 +9,14 @@
   font-weight: bold;
   color: blue;
   /* Tambahkan gaya lainnya sesuai kebutuhan */
+}
+
+.font-waterBrush {
+  font-family: "Water Brush", cursive;
+}
+
+.font-workSans {
+  font-family: "Work Sans", sans-serif;
 }
 
 :root {

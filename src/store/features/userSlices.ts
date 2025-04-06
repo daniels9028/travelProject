@@ -73,6 +73,9 @@ const userSlice = createSlice({
     clearUserMessage: (state, { payload }) => {
       state.message[payload.key] = null;
     },
+    clearLoggedUser: (state) => {
+      state.loggedUser = null;
+    },
   },
   extraReducers: (builder) => {
     handleAsyncCases(builder, getLoggedUserThunk, "loggedUser");
@@ -82,5 +85,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { clearUserMessage } = userSlice.actions;
+export const { clearUserMessage, clearLoggedUser } = userSlice.actions;
 export default userSlice.reducer;

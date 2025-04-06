@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { getLoggedUserThunk } from "../../store/thunks/userThunks";
 import useRoleRedirect from "../../hooks/useRoleRedirect";
+import { clearAuthMessage } from "@/store/features/authenticationSlices";
 
 const LoginPage = () => {
   const {
@@ -34,6 +35,8 @@ const LoginPage = () => {
   useEffect(() => {
     if (message.login) {
       toast.info(message.login);
+
+      dispatch(clearAuthMessage({ key: "login" }));
     }
   }, [message.login]);
 

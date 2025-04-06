@@ -7,16 +7,8 @@ import {
 } from "../thunks/authenticationThunks";
 
 interface AuthenticationState {
-  message: {
-    register: string | null;
-    login: string | null;
-    logout: string | null;
-  };
-  loading: {
-    register: boolean;
-    login: boolean;
-    logout: boolean;
-  };
+  message: Record<string, string | null>;
+  loading: Record<string, boolean>;
   token: string | null;
 }
 
@@ -58,6 +50,7 @@ const handleAsyncCases = <T extends AuthenticationState>(
         if (key === "logout") {
           state.token = null;
           sessionStorage.removeItem("token");
+          sessionStorage.removeItem("user");
         }
       }
     )
@@ -72,6 +65,9 @@ const authenticationSlice = createSlice({
   initialState,
   reducers: {
     resetUserState: () => initialState,
+    clearAuthMessage: (state, { payload }) => {
+      state.message[payload.key] = null;
+    },
   },
   extraReducers: (builder) => {
     handleAsyncCases(builder, registerUserThunk, "register");
@@ -80,5 +76,5 @@ const authenticationSlice = createSlice({
   },
 });
 
-export const { resetUserState } = authenticationSlice.actions;
+export const { resetUserState, clearAuthMessage } = authenticationSlice.actions;
 export default authenticationSlice.reducer;

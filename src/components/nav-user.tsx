@@ -40,8 +40,9 @@ import {
   updateProfileThunk,
 } from "@/store/thunks/userThunks";
 import { toast } from "react-toastify";
-import { clearUserMessage } from "@/store/features/userSlices";
+import { clearLoggedUser, clearUserMessage } from "@/store/features/userSlices";
 import { uploadImageThunk } from "@/store/thunks/uploadThunks";
+import { clearAuthMessage } from "@/store/features/authenticationSlices";
 
 export function NavUser({
   user,
@@ -106,8 +107,13 @@ export function NavUser({
     dispatch(updateProfileThunk(payload));
   };
 
-  const handleLogout = () => {
-    dispatch(logoutUserThunk());
+  const handleLogout = async () => {
+    const data = await dispatch(logoutUserThunk()).unwrap();
+
+    toast.success(data.message);
+
+    dispatch(clearAuthMessage({ key: "logout" }));
+    dispatch(clearLoggedUser());
   };
 
   useEffect(() => {

@@ -21,53 +21,62 @@ import EditPromo from "./pages/admin/promo/EditPromo";
 import AddActivity from "./pages/admin/activity/AddActivity";
 import EditActivity from "./pages/admin/activity/EditActivity";
 import DetailTransaction from "./pages/admin/transaction/DetailTransaction";
+import DiscoverPage from "./pages/DiscoverPage";
+import SpecialDealsPage from "./pages/SpecialDealsPage";
 
 const App = () => {
   return (
     <Router>
       <ToastContainer />
       <Routes>
-        <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/dashboard" element={<AdminDashboard />} />
-          <Route path="/dashboard/users" element={<DataUser />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/discover" element={<DiscoverPage />} />
+        <Route path="/special-deals" element={<SpecialDealsPage />} />
 
-          <Route path="/dashboard/banners" element={<DataBanner />} />
-          <Route path="/dashboard/banners/add-banner" element={<AddBanner />} />
-          <Route path="/dashboard/banners/:id/edit" element={<EditBanner />} />
-
-          <Route path="/dashboard/promos" element={<DataPromo />} />
-          <Route path="/dashboard/promos/add-promo" element={<AddPromo />} />
-          <Route path="/dashboard/promos/:id/edit" element={<EditPromo />} />
-
-          <Route path="/dashboard/categories" element={<DataCategory />} />
-          <Route
-            path="/dashboard/categories/add-category"
-            element={<AddCategory />}
-          />
-          <Route
-            path="/dashboard/categories/:id/edit"
-            element={<EditCategory />}
-          />
-
-          <Route path="/dashboard/activities" element={<DataActivity />} />
-          <Route
-            path="/dashboard/activities/add-activity"
-            element={<AddActivity />}
-          />
-          <Route
-            path="/dashboard/activities/:id/edit"
-            element={<EditActivity />}
-          />
-
-          <Route path="/dashboard/transactions" element={<DataTransaction />} />
-          <Route
-            path="/dashboard/transactions/:id/detail"
-            element={<DetailTransaction />}
-          />
-        </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard">
+            <Route index element={<AdminDashboard />} />
+            {/* Users */}
+            <Route path="users" element={<DataUser />} />
+
+            {/* Banners */}
+            <Route path="banners">
+              <Route index element={<DataBanner />} />
+              <Route path="add-banner" element={<AddBanner />} />
+              <Route path=":id/edit" element={<EditBanner />} />
+            </Route>
+
+            {/* Promos */}
+            <Route path="promos">
+              <Route index element={<DataPromo />} />
+              <Route path="add-promo" element={<AddPromo />} />
+              <Route path=":id/edit" element={<EditPromo />} />
+            </Route>
+
+            {/* Categories */}
+            <Route path="categories">
+              <Route index element={<DataCategory />} />
+              <Route path="add-category" element={<AddCategory />} />
+              <Route path=":id/edit" element={<EditCategory />} />
+            </Route>
+
+            {/* Activities */}
+            <Route path="activities">
+              <Route index element={<DataActivity />} />
+              <Route path="add-activity" element={<AddActivity />} />
+              <Route path=":id/edit" element={<EditActivity />} />
+            </Route>
+
+            {/* Transactions */}
+            <Route path="transactions">
+              <Route index element={<DataTransaction />} />
+              <Route path=":id/detail" element={<DetailTransaction />} />
+            </Route>
+          </Route>
+        </Route>
       </Routes>
     </Router>
   );
