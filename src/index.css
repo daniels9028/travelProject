@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Water+Brush&display=swap&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Water+Brush&display=swap&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap&family=Manrope:wght@200..800");
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -17,6 +17,10 @@
 
 .font-workSans {
   font-family: "Work Sans", sans-serif;
+}
+
+.font-manrope {
+  font-family: "Manrope", sans-serif;
 }
 
 :root {
