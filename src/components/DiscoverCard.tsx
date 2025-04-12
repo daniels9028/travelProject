@@ -13,7 +13,7 @@ const DiscoverCard = ({
   const types = ["Top Rated", "Best Sale", "25% Off"];
   const type = types[index % types.length];
 
-  const [bgImage, setBgImage] = useState(null);
+  const [bgImage, setBgImage] = useState<string | null>(null);
 
   useEffect(() => {
     const img = new Image();
