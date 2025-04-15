@@ -1,4 +1,4 @@
-import { ArrowRight, CircleDollarSign } from "lucide-react";
+import { CircleDollarSign, Info } from "lucide-react";
 import {
   categoryOne,
   categoryTwo,
@@ -9,7 +9,6 @@ import {
   categorySeven,
   categoryEight,
 } from "@/assets/images";
-import { Link } from "react-router-dom";
 import { formatRupiah } from "@/utils/formatDate";
 
 const categoryImages = [
@@ -31,7 +30,7 @@ const SpecialDealCard = ({
   index: number;
 }) => {
   return (
-    <div className="max-w-sm w-[300px] h-[350px] shadow-md font-manrope overflow-hidden rounded-lg border border-gray-200 p-2 flex flex-col gap-4">
+    <div className="cursor-pointer hover:scale-[80%] transition-all duration-500 max-w-sm w-[300px] h-[350px] shadow-md font-manrope overflow-hidden rounded-lg border border-gray-200 p-2 flex flex-col gap-4">
       <div
         className="relative w-full bg-cover bg-center rounded-lg p-2 border h-full"
         style={{
@@ -46,12 +45,9 @@ const SpecialDealCard = ({
                 <CircleDollarSign color="gray" size={16} />
                 {formatRupiah(item.promo_discount_price ?? 0)}
               </div>
-              <Link
-                to="/discover"
-                className="p-1 bg-gray-200 rounded-full w-6 h-6 flex items-center justify-center cursor-pointer"
-              >
-                <ArrowRight color="black" />
-              </Link>
+              <button className="p-1 bg-black rounded-full w-6 h-6 flex items-center justify-center cursor-pointer">
+                <Info color="white" />
+              </button>
             </div>
           </div>
         </div>
