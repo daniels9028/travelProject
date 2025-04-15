@@ -3,7 +3,6 @@ const FooterList = ({
 }: {
   items: { title: string; lists: string[] };
 }) => {
-  console.log(items);
   return (
     <div className="flex flex-col gap-8">
       <p className="text-white font-medium text-[18px]">{items.title}</p>
