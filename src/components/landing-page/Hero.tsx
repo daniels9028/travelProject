@@ -41,7 +41,7 @@ const Hero = ({
           {description}
         </p>
 
-        <div className="flex items-center justify-between gap-8 px-6 py-8 rounded-lg bg-white/10 backdrop-blur-sm lg:w-fit">
+        <div className="flex lg:flex-row flex-col items-center justify-between gap-8 px-6 py-8 rounded-lg bg-white/10 backdrop-blur-sm lg:w-fit">
           <div className="absolute lg:text-7xl text-6xl font-extrabold text-white opacity-10 top-1/2 transform -translate-y-1/2">
             {backgroundText}
           </div>

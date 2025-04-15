@@ -25,9 +25,8 @@ const DiscoverPage = () => {
     "all"
   );
 
-  const handleChangeSelectedCategory = (name: string) => {
+  const handleChangeSelectedCategory = (name: string) =>
     setSelectedCategory(name);
-  };
 
   useEffect(() => {
     dispatch(allCategoryThunk());
@@ -46,7 +45,6 @@ const DiscoverPage = () => {
   const selectedActivity =
     selectedCategory === "all" ? activity : activityByCategory;
 
-  console.log(selectedActivity);
   return (
     <>
       <div
@@ -80,33 +78,29 @@ const DiscoverPage = () => {
           Favorite destinations based on customer reviews
         </p>
 
-        <div className="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-4 mt-8">
-          <button
-            onClick={() => handleChangeSelectedCategory("all")}
-            className={`border px-4 py-2 rounded-full cursor-pointer transition-all font-semibold shadow-sm ${
-              "all" === selectedCategory
-                ? "text-white bg-black"
-                : "hover:bg-gray-300"
-            }`}
-          >
-            All
-          </button>
-          {category.map((cat) => (
-            <button
-              onClick={() => handleChangeSelectedCategory(cat.id)}
-              key={cat.id}
-              className={`border px-4 py-2 rounded-full cursor-pointer transition-all font-semibold shadow-sm ${
-                cat.id === selectedCategory
-                  ? "text-white bg-black"
-                  : "hover:bg-gray-300"
-              }`}
+        <div className="flex flex-col lg:flex-row justify-between items-center w-full max-w-[80%] gap-4 mt-8">
+          <input
+            type="search"
+            placeholder="Search destinations"
+            className="w-full lg:w-2/3 border border-gray-300 px-4 py-2 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+          />
+
+          <div className="w-full lg:w-auto">
+            <select
+              onChange={(e) => handleChangeSelectedCategory(e.target.value)}
+              className="appearance-none w-full lg:w-auto border border-gray-300 px-4 py-2 rounded-full bg-gray-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             >
-              {cat.name}
-            </button>
-          ))}
+              <option value="all">All</option>
+              {category.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 place-items-center gap-4 mt-8 min-h-[200px]">
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 place-items-center gap-8 mt-8 min-h-[200px]">
           {selectedActivity.length > 0 ? (
             selectedActivity.map((item, index) => (
               <DiscoverCard key={item.id} item={item} index={index} />
