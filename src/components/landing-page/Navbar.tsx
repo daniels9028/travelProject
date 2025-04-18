@@ -27,8 +27,6 @@ const Navbar = () => {
 
   const { message } = useSelector((state: RootState) => state.authentication);
 
-  console.log(loggedUser);
-
   const handleLogout = () => {
     dispatch(logoutUserThunk());
   };

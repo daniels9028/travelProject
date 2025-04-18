@@ -23,6 +23,7 @@ import EditActivity from "./pages/admin/activity/EditActivity";
 import DetailTransaction from "./pages/admin/transaction/DetailTransaction";
 import DiscoverPage from "./pages/DiscoverPage";
 import SpecialDealsPage from "./pages/SpecialDealsPage";
+import DiscoverDetailPage from "./pages/DiscoverDetailPage";
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/discover" element={<DiscoverPage />} />
+        <Route path="/discover/:id" element={<DiscoverDetailPage />} />
         <Route path="/special-deals" element={<SpecialDealsPage />} />
 
         <Route path="/login" element={<LoginPage />} />

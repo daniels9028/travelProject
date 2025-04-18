@@ -30,7 +30,7 @@ const SpecialDealCard = ({
   index: number;
 }) => {
   return (
-    <div className="cursor-pointer hover:scale-[80%] transition-all duration-500 max-w-sm w-[300px] h-[350px] shadow-md font-manrope overflow-hidden rounded-lg border border-gray-200 p-2 flex flex-col gap-4">
+    <div className="max-w-sm w-[300px] h-[350px] shadow-md font-manrope overflow-hidden rounded-lg border border-gray-200 p-2 flex flex-col gap-4">
       <div
         className="relative w-full bg-cover bg-center rounded-lg p-2 border h-full"
         style={{

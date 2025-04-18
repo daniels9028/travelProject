@@ -2,6 +2,7 @@ import { registerBackground } from "@/assets/images";
 import { useEffect, useState } from "react";
 import { MapPin, Heart } from "lucide-react";
 import { formatRupiah } from "@/utils/formatDate";
+import { Link } from "react-router-dom";
 
 const DiscoverCard = ({
   item,
@@ -76,9 +77,11 @@ const DiscoverCard = ({
           <span className="text-xl font-bold text-gray-900">
             {formatRupiah(item.price)}
           </span>
-          <button className="bg-gray-100 hover:bg-gray-200 text-sm text-gray-800 px-4 py-2 rounded-lg font-bold cursor-pointer">
-            Book Now
-          </button>
+          <Link to={`/discover/${item.id}`}>
+            <button className="bg-gray-100 hover:bg-gray-200 text-sm text-gray-800 px-4 py-2 rounded-lg font-bold cursor-pointer">
+              Book Now
+            </button>
+          </Link>
         </div>
       </div>
     </div>
