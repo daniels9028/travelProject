@@ -343,7 +343,7 @@ const Navbar = () => {
                 </div>
 
                 {/* Cart Items Area with Scroll */}
-                <div className="flex-1 w-full overflow-y-auto px-4">
+                <div className="flex-1 w-full overflow-y-auto px-4 pb-28">
                   {/* Render your cart items here */}
                   {cart.map((item) => (
                     <div
@@ -376,19 +376,14 @@ const Navbar = () => {
                   ))}
                 </div>
 
-                <div
-                  className="flex flex-col w-full gap-4 p-4"
-                  style={{
-                    paddingBottom: "calc(1rem + env(safe-area-inset-bottom))",
-                  }}
-                >
-                  <div className="flex flex-row justify-between items-center ">
+                <div className="w-full p-4 bg-white sticky bottom-0 shadow-[0_-2px_6px_rgba(0,0,0,0.1)] z-10">
+                  <div className="flex flex-row justify-between items-center mb-4">
                     <p className="font-semibold text-[16px]">Total</p>
                     <p className="font-semibold text-[16px]">
                       {formatRupiah(totalPrice)}
                     </p>
                   </div>
-                  <button className="bg-blue-600 text-white py-2 rounded-lg cursor-pointer hover:bg-blue-900 transition-all duration-300">
+                  <button className="w-full bg-blue-600 text-white py-2 rounded-lg cursor-pointer hover:bg-blue-900 transition-all duration-300">
                     Checkout
                   </button>
                 </div>
