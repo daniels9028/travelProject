@@ -28,6 +28,9 @@ import CustomerServiceList from "@/components/CustomerServiceList";
 import SpecialDealCard from "@/components/SpecialDealCard";
 import { allPromoThunk } from "@/store/thunks/promoThunks";
 import FooterSection from "@/components/FooterSection";
+import DiscoverCardSkeleton from "@/components/DiscoverCardSkeleton";
+import CategoryCardSkeleton from "@/components/CategoryCardSkeleton";
+import SpecialDealCardSkeleton from "@/components/SpecialDealCardSkeleton";
 
 const customerLists = [
   {
@@ -59,9 +62,17 @@ const paymentMethods = [paypal, stripe, skrill, visa];
 const LandingPage = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { activity } = useSelector((state: RootState) => state.activity);
-  const { category } = useSelector((state: RootState) => state.category);
-  const { promo } = useSelector((state: RootState) => state.promo);
+  const { activity, loading: loadingActivity } = useSelector(
+    (state: RootState) => state.activity
+  );
+
+  const { category, loading: loadingCategory } = useSelector(
+    (state: RootState) => state.category
+  );
+
+  const { promo, loading: loadingPromo } = useSelector(
+    (state: RootState) => state.promo
+  );
 
   useEffect(() => {
     dispatch(allActivityThunk());
@@ -104,18 +115,26 @@ const LandingPage = () => {
         </p>
 
         <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 place-items-center gap-4 mt-8">
-          {category?.slice(0, 8).map((cat, index) => (
-            <CategoryCard key={cat.id} item={cat} index={index} />
-          ))}
+          {loadingCategory.allCategory
+            ? Array(8)
+                .fill(null)
+                .map((_, index) => <CategoryCardSkeleton key={index} />)
+            : category
+                ?.slice(0, 8)
+                .map((cat, index) => (
+                  <CategoryCard key={cat.id} item={cat} index={index} />
+                ))}
         </div>
 
-        <Link
-          to="/discover"
-          className="mt-10 font-manrope text-lg font-bold text-white bg-black px-6 py-3 rounded-full flex flex-row items-center gap-4 cursor-pointer transition-all shadow-lg hover:scale-90 duration-300"
-        >
-          <Grip />
-          Load More Destinations
-        </Link>
+        {!loadingCategory.allCategory && (
+          <Link
+            to="/discover"
+            className="mt-10 font-manrope text-lg font-bold text-white bg-black px-6 py-3 rounded-full flex flex-row items-center gap-4 cursor-pointer transition-all shadow-lg hover:scale-90 duration-300"
+          >
+            <Grip />
+            Load More Destinations
+          </Link>
+        )}
       </div>
 
       <div className="w-full bg-[#FFF0EC]">
@@ -150,18 +169,26 @@ const LandingPage = () => {
         </p>
 
         <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 place-items-center gap-4 mt-8">
-          {activity?.slice(0, 6).map((item, index) => (
-            <DiscoverCard key={item.id} item={item} index={index} />
-          ))}
+          {loadingActivity.allActivity
+            ? Array(6)
+                .fill(null)
+                .map((_, index) => <DiscoverCardSkeleton key={index} />)
+            : activity
+                ?.slice(0, 6)
+                .map((item, index) => (
+                  <DiscoverCard key={item.id} item={item} index={index} />
+                ))}
         </div>
 
-        <Link
-          to="/discover"
-          className="mt-10 font-manrope text-lg font-bold text-white bg-black px-6 py-2 rounded-full flex flex-row items-center gap-4 cursor-pointer transition-all shadow-lg hover:scale-90 duration-300"
-        >
-          <Grip />
-          Load More Tours
-        </Link>
+        {!loadingActivity.allActivity && (
+          <Link
+            to="/discover"
+            className="mt-10 font-manrope text-lg font-bold text-white bg-black px-6 py-2 rounded-full flex flex-row items-center gap-4 cursor-pointer transition-all shadow-lg hover:scale-90 duration-300"
+          >
+            <Grip />
+            Load More Tours
+          </Link>
+        )}
       </div>
 
       <div className="w-full bg-[#E3F0FF]">
@@ -228,18 +255,26 @@ const LandingPage = () => {
         </p>
 
         <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 place-items-center gap-4 mt-8">
-          {promo?.slice(0, 6).map((pro, index) => (
-            <SpecialDealCard key={pro.id} item={pro} index={index} />
-          ))}
+          {loadingPromo.allPromo
+            ? Array(6)
+                .fill(null)
+                .map((_, index) => <SpecialDealCardSkeleton key={index} />)
+            : promo
+                ?.slice(0, 6)
+                .map((pro, index) => (
+                  <SpecialDealCard key={pro.id} item={pro} index={index} />
+                ))}
         </div>
 
-        <Link
-          to="/special-deals"
-          className="mt-10 font-manrope text-lg font-bold text-white bg-black px-6 py-3 rounded-full flex flex-row items-center gap-4 cursor-pointer transition-all shadow-lg hover:scale-90 duration-300"
-        >
-          <Grip />
-          Load More Special Deals
-        </Link>
+        {!loadingPromo.allPromo && (
+          <Link
+            to="/special-deals"
+            className="mt-10 font-manrope text-lg font-bold text-white bg-black px-6 py-3 rounded-full flex flex-row items-center gap-4 cursor-pointer transition-all shadow-lg hover:scale-90 duration-300"
+          >
+            <Grip />
+            Load More Special Deals
+          </Link>
+        )}
       </div>
 
       <FooterSection />
