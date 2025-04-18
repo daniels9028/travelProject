@@ -376,7 +376,12 @@ const Navbar = () => {
                   ))}
                 </div>
 
-                <div className="flex flex-col w-full gap-4 px-4 pt-4 pb-14">
+                <div
+                  className="flex flex-col w-full gap-4 p-4"
+                  style={{
+                    paddingBottom: "calc(1rem + env(safe-area-inset-bottom))",
+                  }}
+                >
                   <div className="flex flex-row justify-between items-center ">
                     <p className="font-semibold text-[16px]">Total</p>
                     <p className="font-semibold text-[16px]">
