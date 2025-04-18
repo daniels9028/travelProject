@@ -376,7 +376,7 @@ const Navbar = () => {
                   ))}
                 </div>
 
-                <div className="w-full p-4 bg-white sticky bottom-0 shadow-[0_-2px_6px_rgba(0,0,0,0.1)] z-10">
+                <div className="w-full p-4 bg-white sticky bottom-0 shadow-[0_-2px_6px_rgba(0,0,0,0.1)] z-10 pb-10">
                   <div className="flex flex-row justify-between items-center mb-4">
                     <p className="font-semibold text-[16px]">Total</p>
                     <p className="font-semibold text-[16px]">
