@@ -1,5 +1,6 @@
 import { discoverBackground } from "@/assets/images";
 import DiscoverCard from "@/components/DiscoverCard";
+import DiscoverCardSkeleton from "@/components/DiscoverCardSkeleton";
 import FooterSection from "@/components/FooterSection";
 import Hero from "@/components/landing-page/Hero";
 import Navbar from "@/components/landing-page/Navbar";
@@ -16,9 +17,14 @@ import { useDispatch, useSelector } from "react-redux";
 const DiscoverPage = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { activity, activityByCategory } = useSelector(
-    (state: RootState) => state.activity
-  );
+  const [localLoading, setLocalLoading] = useState<boolean>(false);
+
+  const {
+    activity,
+    activityByCategory,
+    loading: loadingActivity,
+  } = useSelector((state: RootState) => state.activity);
+
   const { category } = useSelector((state: RootState) => state.category);
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
@@ -41,6 +47,24 @@ const DiscoverPage = () => {
       dispatch(activityByCategoryIdThunk({ id: selectedCategory }));
     }
   }, [dispatch, selectedCategory]);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    // When loading starts
+    if (loadingActivity.allActivity || loadingActivity.activityByCategoryId) {
+      setLocalLoading(true);
+    }
+
+    // When loading ends
+    if (!loadingActivity.allActivity && !loadingActivity.activityByCategoryId) {
+      timeout = setTimeout(() => {
+        setLocalLoading(false);
+      }, 500); // smooth delay before hiding skeletons
+    }
+
+    return () => clearTimeout(timeout);
+  }, [loadingActivity]);
 
   const selectedActivity =
     selectedCategory === "all" ? activity : activityByCategory;
@@ -100,12 +124,19 @@ const DiscoverPage = () => {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 place-items-center gap-8 mt-8 min-h-[200px]">
-          {selectedActivity.length > 0 ? (
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 place-items-center gap-8 mt-8 min-h-[200px] transition-all duration-500 ease-out opacity-0 animate-fade-in">
+          {localLoading ? (
+            // Render 6 skeletons while loading
+            Array(9)
+              .fill(null)
+              .map((_, i) => <DiscoverCardSkeleton key={i} />)
+          ) : selectedActivity.length > 0 ? (
+            // Render actual cards
             selectedActivity.map((item, index) => (
               <DiscoverCard key={item.id} item={item} index={index} />
             ))
           ) : (
+            // No result
             <div className="col-span-full flex justify-center items-center">
               <p className="bg-red-100 text-red-600 px-6 py-3 rounded-lg text-lg font-medium shadow-md">
                 No discover destinations found.

@@ -19,7 +19,7 @@ import { LocateIcon, Grip } from "lucide-react";
 import DiscoverCard from "@/components/DiscoverCard";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { allActivityThunk } from "@/store/thunks/activityThunks";
 import { Link } from "react-router-dom";
 import { allCategoryThunk } from "@/store/thunks/categoryThunks";
@@ -80,6 +80,51 @@ const LandingPage = () => {
     dispatch(allPromoThunk());
   }, [dispatch]);
 
+  const [localLoadingActivity, setLocalLoadingActivity] =
+    useState<boolean>(false);
+  const [localLoadingCategory, setLocalLoadingCategory] =
+    useState<boolean>(false);
+  const [localLoadingPromo, setLocalLoadingPromo] = useState<boolean>(false);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    // Handle loading for activity
+    if (loadingActivity.allActivity || loadingActivity.activityByCategoryId) {
+      setLocalLoadingActivity(true);
+    }
+
+    if (!loadingActivity.allActivity && !loadingActivity.activityByCategoryId) {
+      timeout = setTimeout(() => {
+        setLocalLoadingActivity(false);
+      }, 500); // smooth delay before hiding skeletons
+    }
+
+    // Handle loading for category
+    if (loadingCategory.allCategory) {
+      setLocalLoadingCategory(true);
+    }
+
+    if (!loadingCategory.allCategory) {
+      timeout = setTimeout(() => {
+        setLocalLoadingCategory(false);
+      }, 500); // smooth delay before hiding skeletons
+    }
+
+    // Handle loading for promo
+    if (loadingPromo.allPromo) {
+      setLocalLoadingPromo(true);
+    }
+
+    if (!loadingPromo.allPromo) {
+      timeout = setTimeout(() => {
+        setLocalLoadingPromo(false);
+      }, 500); // smooth delay before hiding skeletons
+    }
+
+    return () => clearTimeout(timeout);
+  }, [loadingActivity, loadingCategory, loadingPromo]);
+
   return (
     <>
       <div
@@ -114,8 +159,8 @@ const LandingPage = () => {
           Favourite destinations of professional tourists
         </p>
 
-        <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 place-items-center gap-4 mt-8">
-          {loadingCategory.allCategory
+        <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 place-items-center gap-4 mt-8 transition-all shadow-lg hover:scale-90 duration-300">
+          {localLoadingCategory
             ? Array(8)
                 .fill(null)
                 .map((_, index) => <CategoryCardSkeleton key={index} />)
@@ -126,7 +171,7 @@ const LandingPage = () => {
                 ))}
         </div>
 
-        {!loadingCategory.allCategory && (
+        {!localLoadingCategory && (
           <Link
             to="/discover"
             className="mt-10 font-manrope text-lg font-bold text-white bg-black px-6 py-3 rounded-full flex flex-row items-center gap-4 cursor-pointer transition-all shadow-lg hover:scale-90 duration-300"
@@ -168,8 +213,8 @@ const LandingPage = () => {
           The best booking platform you can trust
         </p>
 
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 place-items-center gap-4 mt-8">
-          {loadingActivity.allActivity
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 place-items-center gap-4 mt-8 transition-all shadow-lg hover:scale-90 duration-300">
+          {localLoadingActivity
             ? Array(6)
                 .fill(null)
                 .map((_, index) => <DiscoverCardSkeleton key={index} />)
@@ -180,7 +225,7 @@ const LandingPage = () => {
                 ))}
         </div>
 
-        {!loadingActivity.allActivity && (
+        {!localLoadingActivity && (
           <Link
             to="/discover"
             className="mt-10 font-manrope text-lg font-bold text-white bg-black px-6 py-2 rounded-full flex flex-row items-center gap-4 cursor-pointer transition-all shadow-lg hover:scale-90 duration-300"
@@ -255,7 +300,7 @@ const LandingPage = () => {
         </p>
 
         <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 place-items-center gap-4 mt-8">
-          {loadingPromo.allPromo
+          {localLoadingPromo
             ? Array(6)
                 .fill(null)
                 .map((_, index) => <SpecialDealCardSkeleton key={index} />)
@@ -266,7 +311,7 @@ const LandingPage = () => {
                 ))}
         </div>
 
-        {!loadingPromo.allPromo && (
+        {!localLoadingPromo && (
           <Link
             to="/special-deals"
             className="mt-10 font-manrope text-lg font-bold text-white bg-black px-6 py-3 rounded-full flex flex-row items-center gap-4 cursor-pointer transition-all shadow-lg hover:scale-90 duration-300"
