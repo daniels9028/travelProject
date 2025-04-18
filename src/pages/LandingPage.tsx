@@ -97,7 +97,7 @@ const LandingPage = () => {
     if (!loadingActivity.allActivity && !loadingActivity.activityByCategoryId) {
       timeout = setTimeout(() => {
         setLocalLoadingActivity(false);
-      }, 500); // smooth delay before hiding skeletons
+      }, 1500); // smooth delay before hiding skeletons
     }
 
     // Handle loading for category
@@ -108,7 +108,7 @@ const LandingPage = () => {
     if (!loadingCategory.allCategory) {
       timeout = setTimeout(() => {
         setLocalLoadingCategory(false);
-      }, 500); // smooth delay before hiding skeletons
+      }, 1500); // smooth delay before hiding skeletons
     }
 
     // Handle loading for promo
@@ -119,7 +119,7 @@ const LandingPage = () => {
     if (!loadingPromo.allPromo) {
       timeout = setTimeout(() => {
         setLocalLoadingPromo(false);
-      }, 500); // smooth delay before hiding skeletons
+      }, 1500); // smooth delay before hiding skeletons
     }
 
     return () => clearTimeout(timeout);
@@ -159,7 +159,7 @@ const LandingPage = () => {
           Favourite destinations of professional tourists
         </p>
 
-        <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 place-items-center gap-4 mt-8 transition-all shadow-lg hover:scale-90 duration-300">
+        <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 place-items-center gap-4 mt-8 transition-all duration-500 ease-out opacity-0 animate-fade-in">
           {localLoadingCategory
             ? Array(8)
                 .fill(null)
@@ -213,7 +213,7 @@ const LandingPage = () => {
           The best booking platform you can trust
         </p>
 
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 place-items-center gap-4 mt-8 transition-all shadow-lg hover:scale-90 duration-300">
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 place-items-center gap-4 mt-8 transition-all duration-500 ease-out opacity-0 animate-fade-in">
           {localLoadingActivity
             ? Array(6)
                 .fill(null)
@@ -299,7 +299,7 @@ const LandingPage = () => {
           Steals, Deals, and Everything in Between!
         </p>
 
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 place-items-center gap-4 mt-8">
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 place-items-center gap-4 mt-8 transition-all duration-500 ease-out opacity-0 animate-fade-in">
           {localLoadingPromo
             ? Array(6)
                 .fill(null)

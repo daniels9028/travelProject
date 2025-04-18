@@ -60,7 +60,7 @@ const DiscoverPage = () => {
     if (!loadingActivity.allActivity && !loadingActivity.activityByCategoryId) {
       timeout = setTimeout(() => {
         setLocalLoading(false);
-      }, 500); // smooth delay before hiding skeletons
+      }, 1500); // smooth delay before hiding skeletons
     }
 
     return () => clearTimeout(timeout);

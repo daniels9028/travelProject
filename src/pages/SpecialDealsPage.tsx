@@ -3,20 +3,42 @@ import FooterSection from "@/components/FooterSection";
 import Hero from "@/components/landing-page/Hero";
 import Navbar from "@/components/landing-page/Navbar";
 import SpecialDealCard from "@/components/SpecialDealCard";
+import SpecialDealCardSkeleton from "@/components/SpecialDealCardSkeleton";
 import { AppDispatch, RootState } from "@/store/store";
 import { allPromoThunk } from "@/store/thunks/promoThunks";
 import { Map } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const SpecialDealsPage = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { promo } = useSelector((state: RootState) => state.promo);
+  const { promo, loading } = useSelector((state: RootState) => state.promo);
+
+  const [localLoading, setLocalLoading] = useState<boolean>(false);
 
   useEffect(() => {
     dispatch(allPromoThunk());
   }, [dispatch]);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    // When loading starts
+    if (loading.allPromo) {
+      setLocalLoading(true);
+    }
+
+    // When loading ends
+    if (!loading.allPromo) {
+      timeout = setTimeout(() => {
+        setLocalLoading(false);
+      }, 1500); // smooth delay before hiding skeletons
+    }
+
+    return () => clearTimeout(timeout);
+  }, [loading.allPromo]);
+
   return (
     <>
       <div
@@ -57,10 +79,16 @@ const SpecialDealsPage = () => {
           />
         </div>
 
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 place-items-center gap-4 mt-8">
-          {promo?.slice(0, 6).map((pro, index) => (
-            <SpecialDealCard key={pro.id} item={pro} index={index} />
-          ))}
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 place-items-center gap-4 mt-8 transition-all duration-500 ease-out opacity-0 animate-fade-in">
+          {localLoading
+            ? Array(6)
+                .fill(null)
+                .map((_, index) => <SpecialDealCardSkeleton key={index} />)
+            : promo
+                ?.slice(0, 6)
+                .map((pro, index) => (
+                  <SpecialDealCard key={pro.id} item={pro} index={index} />
+                ))}
         </div>
       </div>
 
