@@ -327,7 +327,7 @@ const Navbar = () => {
                 animate={{ x: 0 }}
                 exit={{ x: "100%" }}
                 transition={{ type: "tween", duration: 0.4 }}
-                className="fixed top-0 right-0 md:w-1/4 w-full h-screen bg-white backdrop-blur-sm flex flex-col space-y-4 text-black font-semibold z-50 items-center overflow-hidden"
+                className="fixed top-0 right-0 md:w-1/2 lg:w-1/4 w-full h-screen bg-white backdrop-blur-sm flex flex-col space-y-4 text-black font-semibold z-50 items-center overflow-hidden"
               >
                 <div className="flex flex-row w-full justify-between items-center shadow-sm p-4">
                   <div className="flex flex-col">
@@ -376,7 +376,12 @@ const Navbar = () => {
                   ))}
                 </div>
 
-                <div className="flex flex-col w-full gap-4 p-4">
+                <div
+                  className="flex flex-col w-full gap-4 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))]"
+                  style={{
+                    paddingBottom: "calc(1rem + env(safe-area-inset-bottom))",
+                  }}
+                >
                   <div className="flex flex-row justify-between items-center ">
                     <p className="font-semibold text-[16px]">Total</p>
                     <p className="font-semibold text-[16px]">
