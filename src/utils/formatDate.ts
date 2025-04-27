@@ -14,7 +14,7 @@ export const formatDate = (date: string | Date): string => {
 };
 
 export const formatRupiah = (nilai: number): string => {
-  if (!nilai) return "-";
+  // if (!nilai) return "-";
 
   return new Intl.NumberFormat("id-ID", {
     style: "currency",

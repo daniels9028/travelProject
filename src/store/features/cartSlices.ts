@@ -55,7 +55,11 @@ const handleAsyncCases = <T extends CartCase>(
 const cartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {},
+  reducers: {
+    clearCartMessage: (state, { payload }) => {
+      state.message[payload.key] = null;
+    },
+  },
   extraReducers: (builder) => {
     handleAsyncCases(builder, addCartThunk, "addCart");
     handleAsyncCases(builder, updateCartThunk, "updateCart");
@@ -64,4 +68,5 @@ const cartSlice = createSlice({
   },
 });
 
+export const { clearCartMessage } = cartSlice.actions;
 export default cartSlice.reducer;
