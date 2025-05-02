@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import ListCard from "./ListCart";
 import { X } from "lucide-react";
 import { formatRupiah } from "@/utils/formatDate";
+import { Link } from "react-router-dom";
 
 const ShopCart = ({
   isCartOpen,
@@ -27,8 +28,6 @@ const ShopCart = ({
   const totalPrice = cart.reduce((sum, cartItem) => {
     return sum + cartItem.quantity * cartItem.activity.price;
   }, 0);
-
-  console.log(totalPrice);
 
   useEffect(() => {
     if (loggedUser) dispatch(allCartThunk());
@@ -107,9 +106,11 @@ const ShopCart = ({
                   {formatRupiah(totalPrice)}
                 </p>
               </div>
-              <button className="w-full bg-blue-600 text-white py-2 rounded-lg cursor-pointer hover:bg-blue-900 transition-all duration-300">
-                Checkout
-              </button>
+              <Link to="/cart">
+                <button className="w-full bg-blue-600 text-white py-2 rounded-lg cursor-pointer hover:bg-blue-900 transition-all duration-300">
+                  Checkout
+                </button>
+              </Link>
             </div>
           </motion.div>
         </>

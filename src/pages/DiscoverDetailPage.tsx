@@ -5,93 +5,242 @@ import {
   discoverBackground,
 } from "@/assets/images";
 import FooterSection from "@/components/FooterSection";
-import Hero from "@/components/landing-page/Hero";
+import { Star, Flag, MapPin } from "lucide-react";
 import Navbar from "@/components/landing-page/Navbar";
 import { AppDispatch, RootState } from "@/store/store";
 import { activityByIdThunk } from "@/store/thunks/activityThunks";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { formatRupiah } from "@/utils/formatDate";
 
-const backgrounds = [
-  registerBackground,
-  loginBackground,
-  heroBackground,
-  discoverBackground,
-];
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import { addCartThunk, allCartThunk } from "@/store/thunks/cartThunks";
+import { toast } from "react-toastify";
+import { clearCartMessage } from "@/store/features/cartSlices";
+
+const MySwal = withReactContent(Swal);
 
 const DiscoverDetailPage = () => {
   const params = useParams();
+
+  const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
 
   const selectedId = params.id ?? "";
 
+  const { loggedUser } = useSelector((state: RootState) => state.user);
+
   const { selectedActivity } = useSelector(
     (state: RootState) => state.activity
   );
 
-  const index = Math.floor(Math.random() * backgrounds.length);
+  const { message } = useSelector((state: RootState) => state.cart);
+
+  const handleBookNow = () => {
+    if (!selectedActivity) return;
+
+    if (!loggedUser) {
+      MySwal.fire({
+        title: "You need to be logged in",
+        text: "Please log in to proceed with booking.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#aaa",
+        confirmButtonText: "Login",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Redirect to login page
+          navigate("/login");
+        }
+      });
+      return;
+    }
+
+    dispatch(addCartThunk({ activityId: selectedActivity.id }))
+      .unwrap()
+      .then((_) => {
+        setTimeout(() => {
+          navigate("/cart");
+        }, 1000);
+      });
+  };
+
+  const handleAddCart = () => {
+    if (!selectedActivity) return;
+
+    if (!loggedUser) {
+      MySwal.fire({
+        title: "You need to be logged in",
+        text: "Please log in to proceed with add to cart.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#aaa",
+        confirmButtonText: "Login",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Redirect to login page
+          navigate("/login");
+        }
+      });
+      return;
+    }
+
+    dispatch(addCartThunk({ activityId: selectedActivity.id }))
+      .unwrap()
+      .then((_) => {
+        dispatch(allCartThunk());
+      });
+  };
 
   useEffect(() => {
     if (!selectedId) return;
-    dispatch(activityByIdThunk({ id: selectedId }));
-  }, [selectedId]);
 
-  console.log(selectedActivity);
+    dispatch(activityByIdThunk({ id: selectedId }));
+  }, [selectedId, dispatch]);
+
+  useEffect(() => {
+    if (message.addCart) {
+      toast.info(message.addCart);
+
+      dispatch(clearCartMessage({ key: "addCart" }));
+    }
+  }, [message.addCart]);
 
   return (
     <>
-      <div
-        className="relative w-full bg-cover bg-center"
-        style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${backgrounds[index]})`,
-        }}
-      >
-        {/* Navbar */}
+      <div className="relative w-full bg-cover bg-center bg-black h-24">
         <Navbar />
-
-        <Hero
-          title={`🌄 ${selectedActivity?.title}`}
-          subtitle={`${selectedActivity?.city}, ${selectedActivity?.province}`}
-          description={selectedActivity?.description ?? ""}
-          buttonTitle={null}
-          buttonDescription={null}
-          backgroundText={null}
-          buttonIcon={undefined}
-          link={null}
-        />
       </div>
 
-      <div className="container mx-auto flex flex-col items-center justify-center px-6 my-10">
-        <h6 className="text-center lg:text-[52px] text-[30px] font-extrabold font-manrope">
-          Top Searched Destinations
+      <div className="container mx-auto flex flex-col px-6 my-10 font-manrope">
+        <div className="flex flex-row items-center gap-4 mb-4">
+          <span className="bg-green-100 text-green-600 lg:text-lg text-base font-semibold px-6 py-1 rounded-full shadow-sm w-fit">
+            Best Sale
+          </span>
+          <span className="bg-gray-200 text-black lg:text-lg text-base font-semibold px-6 py-1 rounded-full shadow-sm w-fit">
+            Top Rated
+          </span>
+        </div>
+        <h6 className="lg:text-[52px] text-[30px] font-extrabold mb-4">
+          {selectedActivity?.title}
         </h6>
-        <p className="text-center font-manrope text-[#737373] lg:text-[25px] text-[16px]">
-          Favourite destinations of professional tourists
-        </p>
+        <div className="flex lg:flex-row flex-col lg:items-center lg:gap-8 gap-2">
+          <div className="flex flex-row items-center gap-2 lg:text-lg">
+            <Star size={18} />
+            {selectedActivity?.rating}/5.0{" "}
+            <span className="font-semibold text-gray-500 text-nowrap">
+              ({selectedActivity?.total_reviews}+ Reviews)
+            </span>
+          </div>
+          <p className="flex flex-row items-center gap-2 text-lg">
+            <MapPin size={18} />
+            {selectedActivity?.city}, {selectedActivity?.province}
+          </p>
+          <p className="flex flex-row items-center gap-2 text-lg">
+            <Flag size={18} />
+            {selectedActivity?.category.name}
+          </p>
+        </div>
+      </div>
 
-        <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 place-items-center gap-4 mt-8 transition-all duration-500 ease-out opacity-0 animate-fade-in">
-          {/* {localLoadingCategory
-            ? Array(8)
-                .fill(null)
-                .map((_, index) => <CategoryCardSkeleton key={index} />)
-            : category
-                ?.slice(0, 8)
-                .map((cat, index) => (
-                  <CategoryCard key={cat.id} item={cat} index={index} />
-                ))} */}
+      <div className="container mx-auto px-6 mb-10">
+        <div className="flex flex-wrap gap-2">
+          {/* Left side - Big Photo */}
+          <div className="flex-1 lg:w-1/2 lg:h-[410px] w-full">
+            <img
+              src={loginBackground}
+              alt="Big Beach"
+              className="w-full h-full object-cover rounded-lg shadow-md border"
+            />
+          </div>
+
+          {/* Right side - Three Small Photos */}
+          <div className="flex flex-col gap-2 lg:w-1/2 w-full">
+            <div className="lg:h-[200px]">
+              <img
+                src={registerBackground}
+                alt="Small Beach 1"
+                className="w-full h-full object-cover rounded-lg shadow-md border"
+              />
+            </div>
+            <div className="lg:h-[200px] flex gap-2">
+              <div className="flex-1">
+                <img
+                  src={heroBackground}
+                  alt="Small Beach 2"
+                  className="w-full h-full object-cover rounded-lg shadow-md border"
+                />
+              </div>
+              <div className="flex-1">
+                <img
+                  src={discoverBackground}
+                  alt="Small Windmill"
+                  className="w-full h-full object-cover rounded-lg shadow-md border"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="container flex lg:flex-row flex-col mx-auto px-6 mb-10 font-manrope gap-4">
+        <div className="lg:w-2/3 w-full">
+          <h6 className="lg:text-[52px] text-[30px] font-extrabold mb-2">
+            Tour Overview
+          </h6>
+          <p className="font-manrope text-[#737373] lg:text-[20px] text-[14px]">
+            {selectedActivity?.description ?? "-"}
+          </p>
+
+          <hr className="border my-10" />
+
+          <h6 className="lg:text-[52px] text-[30px] font-extrabold mb-2">
+            What's Included
+          </h6>
+          <p className="font-manrope text-[#737373] lg:text-[20px] text-[14px]">
+            {selectedActivity?.facilities}
+          </p>
+
+          <hr className="border my-10" />
+
+          <h6 className="lg:text-[52px] text-[30px] font-extrabold mb-2">
+            Tour Map
+          </h6>
+          <div className="flex items-start gap-2 font-manrope text-[#737373] lg:text-[20px] text-[14px]">
+            <MapPin size={30} className="mt-0.5" />
+            <p className="m-0">{selectedActivity?.address}</p>
+          </div>
+
+          <div className="w-full h-[450px] rounded-lg overflow-hidden shadow-md mt-4"></div>
         </div>
 
-        {/* {!localLoadingCategory && (
-          <Link
-            to="/discover"
-            className="mt-10 font-manrope text-lg font-bold text-white bg-black px-6 py-3 rounded-full flex flex-row items-center gap-4 cursor-pointer transition-all shadow-lg hover:scale-90 duration-300"
+        <div className="lg:w-1/3 border rounded-lg sticky shadow-md h-fit border-gray-200 p-6 flex flex-col">
+          <p className="text-2xl font-bold mb-4">Best Price</p>
+
+          <p className="font-bold text-xl mb-4">
+            {formatRupiah(selectedActivity?.price ?? 0)}
+          </p>
+
+          <button
+            className="px-6 py-3 bg-black rounded-lg mb-2 text-white font-semibold cursor-pointer transition-all"
+            onClick={handleBookNow}
           >
-            <Grip />
-            Load More Destinations
-          </Link>
-        )} */}
+            Book Now
+          </button>
+          <button
+            className="px-6 py-3 bg-white border border-black rounded-lg mb-2 text-black font-semibold cursor-pointer hover:bg-slate-200 transition-all"
+            onClick={handleAddCart}
+          >
+            Add to Cart
+          </button>
+        </div>
       </div>
 
       <FooterSection />
