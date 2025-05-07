@@ -1,21 +1,15 @@
 import { logo } from "@/assets/images";
-import { RootState } from "@/store/store";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const MobileSidebarMenu = ({
   isOpen,
   setIsOpen,
-  handleLogout,
 }: {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  handleLogout: () => void;
 }) => {
-  const { loggedUser } = useSelector((state: RootState) => state.user);
-
   return (
     <AnimatePresence>
       {isOpen && (
@@ -74,46 +68,6 @@ const MobileSidebarMenu = ({
             >
               Special Deals
             </Link>
-
-            {/* User Menu or Login */}
-            {loggedUser ? (
-              <div className="flex flex-col items-center space-y-2">
-                <button className="flex items-center gap-3 px-4 py-2">
-                  <img
-                    src={loggedUser.profilePictureUrl || "/default-avatar.png"}
-                    alt="Profile"
-                    className="w-10 h-10 rounded-full object-cover border-2 border-white"
-                  />
-                  <span className="text-base">{loggedUser?.name}</span>
-                </button>
-                <div className="w-full bg-white rounded-md shadow-lg text-gray-800 overflow-hidden">
-                  <Link
-                    to="/profile"
-                    onClick={() => setIsOpen(false)}
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    Profile
-                  </Link>
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      setIsOpen(false);
-                    }}
-                    className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                  >
-                    Logout
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <Link
-                to="/login"
-                onClick={() => setIsOpen(false)}
-                className="bg-red-500 text-[12px] text-white px-6 py-2 rounded-md font-medium hover:bg-red-600 transition w-fit"
-              >
-                Login
-              </Link>
-            )}
           </motion.div>
         </>
       )}

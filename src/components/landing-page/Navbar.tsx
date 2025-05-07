@@ -1,4 +1,4 @@
-import { Menu, ShoppingCart } from "lucide-react";
+import { LogOut, Menu, Package, ShoppingCart, User } from "lucide-react";
 import { logo } from "@/assets/images";
 import { Link, NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -11,6 +11,14 @@ import { clearLoggedUser } from "@/store/features/userSlices";
 import { motion, AnimatePresence } from "framer-motion";
 import ShopCart from "../ShopCart";
 import MobileSidebarMenu from "../MobileSidebarMenu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -24,6 +32,8 @@ const Navbar = () => {
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
 
@@ -131,44 +141,68 @@ const Navbar = () => {
         </div>
 
         {loggedUser ? (
-          <div className="relative flex items-center space-x-4">
+          <div className="relative flex items-center gap-4 sm:gap-6">
             {/* Cart Icon */}
             <div
-              className="text-white hover:text-red-400 transition relative cursor-pointer"
+              className="relative text-white hover:text-red-400 transition cursor-pointer"
               onClick={() => setIsCartOpen(!isCartOpen)}
             >
-              <ShoppingCart />
-              {/* Optional: Cart count badge */}
-              <span className="absolute -top-2 -right-2 text-[10px] bg-red-500 text-white w-4 h-4 flex items-center justify-center rounded-full">
+              <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6" />
+              <span className="absolute -top-2 -right-2 text-[10px] sm:text-xs bg-red-500 text-white w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center rounded-full">
                 {cart.length}
               </span>
             </div>
 
             {/* Profile Dropdown */}
-            <div className="relative group">
-              <button className="flex items-center gap-2 text-white px-4 py-2 rounded-md font-medium transition md:flex cursor-pointer">
-                <img
-                  src={loggedUser.profilePictureUrl || "/default-avatar.png"}
-                  alt="Profile"
-                  className="w-10 h-10 rounded-full object-cover"
-                />
-              </button>
+            <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="p-0 rounded-full">
+                  <Avatar className="w-8 h-8 sm:w-10 sm:h-10">
+                    <AvatarImage
+                      src={
+                        loggedUser.profilePictureUrl || "/default-avatar.png"
+                      }
+                      alt="Profile"
+                    />
+                    <AvatarFallback>
+                      {loggedUser.name?.[0] || "U"}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
 
-              <div className="absolute right-0 mt-2 w-40 bg-white shadow-md rounded-md opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-10">
-                <Link
-                  to="/profile"
-                  className="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition"
-                >
-                  Profile
-                </Link>
-                <button
+              <DropdownMenuContent
+                className="w-44 sm:w-48 mt-2 shadow-lg rounded-md z-50"
+                sideOffset={8}
+                align="end"
+              >
+                <DropdownMenuItem asChild>
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-2 w-full px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition"
+                  >
+                    <User className="w-4 h-4" />
+                    Profile
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    to="/orders"
+                    className="flex items-center gap-2 w-full px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition"
+                  >
+                    <Package className="w-4 h-4" />
+                    Orders
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem
                   onClick={handleLogout}
-                  className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100 transition"
+                  className="flex items-center gap-2 px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition cursor-pointer"
                 >
+                  <LogOut className="w-4 h-4" />
                   Logout
-                </button>
-              </div>
-            </div>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         ) : (
           <Link
@@ -180,11 +214,7 @@ const Navbar = () => {
         )}
 
         {/* Mobile Fullscreen Slide-in Menu */}
-        <MobileSidebarMenu
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          handleLogout={handleLogout}
-        />
+        <MobileSidebarMenu isOpen={isOpen} setIsOpen={setIsOpen} />
 
         {/* Shopping Cart */}
         <ShopCart isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} />
