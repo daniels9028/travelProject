@@ -26,6 +26,7 @@ import SpecialDealsPage from "./pages/SpecialDealsPage";
 import DiscoverDetailPage from "./pages/DiscoverDetailPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrdersPage from "./pages/OrdersPage";
+import DetailOrderPage from "./pages/DetailOrderPage";
 
 const App = () => {
   return (
@@ -43,6 +44,7 @@ const App = () => {
         <Route element={<ProtectedRoute allowedRoles={["user"]} />}>
           <Route path="/cart" element={<CheckoutPage />} />
           <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/orders/:id" element={<DetailOrderPage />} />
         </Route>
 
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>

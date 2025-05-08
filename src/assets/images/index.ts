@@ -26,6 +26,7 @@ import mastercard from "./payment/mastercard.png";
 import visa from "./payment/visa.png";
 import skrill from "./payment/skrill.png";
 import footer from "./footer.png";
+import no_image from "./no_image.png";
 
 export {
   loginBackground,
@@ -56,4 +57,5 @@ export {
   visa,
   skrill,
   footer,
+  no_image,
 };
