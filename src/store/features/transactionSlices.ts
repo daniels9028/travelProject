@@ -89,7 +89,7 @@ const transactionSlice = createSlice({
     handleAsyncCases(
       builder,
       updateTransactionProofPaymentThunk,
-      "updateTranscationProofPayment"
+      "updateTransactionProofPayment"
     );
     handleAsyncCases(
       builder,
