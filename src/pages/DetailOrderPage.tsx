@@ -1,4 +1,11 @@
-import { discoverBackground, no_image } from "@/assets/images";
+import {
+  no_image,
+  randomOrder1,
+  randomOrder2,
+  randomOrder3,
+  randomOrder4,
+  randomOrder5,
+} from "@/assets/images";
 import DetailOrder from "@/components/DetailOrder";
 import Hero from "@/components/landing-page/Hero";
 import Navbar from "@/components/landing-page/Navbar";
@@ -34,6 +41,14 @@ import { clearTransactionMessage } from "@/store/features/transactionSlices";
 import { useToastMessage } from "@/hooks/useToastMessage";
 import { uploadImageThunk } from "@/store/thunks/uploadThunks";
 
+const randomOrder: Record<string, string> = {
+  randomOrder1,
+  randomOrder2,
+  randomOrder3,
+  randomOrder4,
+  randomOrder5,
+};
+
 const MySwal = withReactContent(Swal);
 
 const DetailOrderPage = () => {
@@ -52,6 +67,8 @@ const DetailOrderPage = () => {
   const { url } = useSelector((state: RootState) => state.upload);
 
   const [copied, setCopied] = useState(false);
+
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -117,6 +134,12 @@ const DetailOrderPage = () => {
   };
 
   useEffect(() => {
+    const keys = Object.keys(randomOrder);
+    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+    setSelectedImage(randomOrder[randomKey]);
+  }, []);
+
+  useEffect(() => {
     dispatch(transactionByIdThunk({ id: id }));
   }, [dispatch, id]);
 
@@ -141,7 +164,7 @@ const DetailOrderPage = () => {
       <div
         className="relative w-full bg-cover bg-center"
         style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${discoverBackground})`,
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${selectedImage})`,
         }}
       >
         <Navbar />
@@ -228,12 +251,12 @@ const DetailOrderPage = () => {
 
           <p className="font-bold text-lg my-6">Payment Proof</p>
 
-          <div className="flex flex-col gap-4 border w-full rounded-xl p-6 border-gray-200 shadow-md">
+          <div className="flex flex-col gap-4 border w-full rounded-xl p-6 border-gray-200 shadow-md items-center">
             <img
               src={selectedTransaction.proofPaymentUrl ?? no_image}
               alt="payment-proof"
               onError={(e) => ((e.target as HTMLImageElement).src = no_image)}
-              className="w-full h-fit rounded-xl object-cover"
+              className="w-[300px] h-[300px] rounded-xl bg-cover"
             />
           </div>
 

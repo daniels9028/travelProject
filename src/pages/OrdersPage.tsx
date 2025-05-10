@@ -1,4 +1,4 @@
-import { promoBackground } from "@/assets/images";
+import { orderBackground } from "@/assets/images";
 import DetailOrder from "@/components/DetailOrder";
 import FooterSection from "@/components/FooterSection";
 import Hero from "@/components/landing-page/Hero";
@@ -50,7 +50,7 @@ const OrdersPage = () => {
       <div
         className="relative w-full bg-cover bg-center"
         style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${promoBackground})`,
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${orderBackground})`,
         }}
       >
         <Navbar />

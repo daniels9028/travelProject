@@ -3,13 +3,18 @@ import {
   loginBackground,
   heroBackground,
   discoverBackground,
+  randomDiscover1,
+  randomDiscover2,
+  randomDiscover3,
+  randomDiscover4,
+  randomDiscover5,
 } from "@/assets/images";
 import FooterSection from "@/components/FooterSection";
 import { Star, Flag, MapPin } from "lucide-react";
 import Navbar from "@/components/landing-page/Navbar";
 import { AppDispatch, RootState } from "@/store/store";
 import { activityByIdThunk } from "@/store/thunks/activityThunks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { formatRupiah } from "@/utils/formatDate";
@@ -19,8 +24,17 @@ import withReactContent from "sweetalert2-react-content";
 import { addCartThunk, allCartThunk } from "@/store/thunks/cartThunks";
 import { toast } from "react-toastify";
 import { clearCartMessage } from "@/store/features/cartSlices";
+import Hero from "@/components/landing-page/Hero";
 
 const MySwal = withReactContent(Swal);
+
+const randomDiscover: Record<string, string> = {
+  randomDiscover1,
+  randomDiscover2,
+  randomDiscover3,
+  randomDiscover4,
+  randomDiscover5,
+};
 
 const DiscoverDetailPage = () => {
   const params = useParams();
@@ -38,6 +52,8 @@ const DiscoverDetailPage = () => {
   );
 
   const { message } = useSelector((state: RootState) => state.cart);
+
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const handleBookNow = () => {
     if (!selectedActivity) return;
@@ -100,6 +116,12 @@ const DiscoverDetailPage = () => {
   };
 
   useEffect(() => {
+    const keys = Object.keys(randomDiscover);
+    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+    setSelectedImage(randomDiscover[randomKey]);
+  }, []);
+
+  useEffect(() => {
     if (!selectedId) return;
 
     dispatch(activityByIdThunk({ id: selectedId }));
@@ -115,8 +137,24 @@ const DiscoverDetailPage = () => {
 
   return (
     <>
-      <div className="relative w-full bg-cover bg-center bg-black h-24">
+      <div
+        className="relative w-full bg-cover bg-center"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${selectedImage})`,
+        }}
+      >
         <Navbar />
+
+        <Hero
+          title="Discover Details"
+          subtitle="Explore Deeper Before You Decide"
+          description="Uncover in-depth information, unique highlights, and key features to help you make the right choice before booking or purchasing."
+          buttonTitle=""
+          buttonDescription=""
+          backgroundText=""
+          buttonIcon=""
+          link=""
+        />
       </div>
 
       <div className="container mx-auto flex flex-col px-6 my-10 font-manrope">

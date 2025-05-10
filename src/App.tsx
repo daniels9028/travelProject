@@ -27,6 +27,7 @@ import DiscoverDetailPage from "./pages/DiscoverDetailPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrdersPage from "./pages/OrdersPage";
 import DetailOrderPage from "./pages/DetailOrderPage";
+import ProfilePage from "./pages/ProfilePage";
 
 const App = () => {
   return (
@@ -42,6 +43,7 @@ const App = () => {
         <Route path="/register" element={<RegisterPage />} />
 
         <Route element={<ProtectedRoute allowedRoles={["user"]} />}>
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/cart" element={<CheckoutPage />} />
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/orders/:id" element={<DetailOrderPage />} />

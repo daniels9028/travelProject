@@ -23,6 +23,8 @@ type SelectedItem = {
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { useNavigate } from "react-router-dom";
+import Hero from "@/components/landing-page/Hero";
+import { checkoutBackground } from "@/assets/images";
 
 const MySwal = withReactContent(Swal);
 
@@ -124,8 +126,24 @@ const CheckoutPage = () => {
 
   return (
     <>
-      <div className="relative w-full bg-cover bg-center bg-black h-24">
+      <div
+        className="relative w-full bg-cover bg-center"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${checkoutBackground})`,
+        }}
+      >
         <Navbar />
+
+        <Hero
+          title="Your Cart"
+          subtitle="Review Items Before Checkout"
+          description="View and manage the items you've added to your cart. Make changes or proceed to secure checkout when you're ready."
+          buttonTitle=""
+          buttonDescription=""
+          backgroundText=""
+          buttonIcon=""
+          link=""
+        />
       </div>
 
       <div className="container mx-auto flex lg:flex-row flex-col px-6 my-10 font-manrope gap-4">
