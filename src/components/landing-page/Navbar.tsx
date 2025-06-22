@@ -27,8 +27,6 @@ const Navbar = () => {
 
   const { loggedUser } = useSelector((state: RootState) => state.user);
 
-  const { message } = useSelector((state: RootState) => state.authentication);
-
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -37,8 +35,13 @@ const Navbar = () => {
 
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
 
-  const handleLogout = () => {
-    dispatch(logoutUserThunk());
+  const handleLogout = async () => {
+    const data = await dispatch(logoutUserThunk()).unwrap();
+
+    toast.success(data.message);
+
+    dispatch(clearLoggedUser());
+    dispatch(clearAuthMessage({ key: "logout" }));
   };
 
   useEffect(() => {
@@ -63,15 +66,6 @@ const Navbar = () => {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  useEffect(() => {
-    if (message.logout) {
-      toast.success(message.logout);
-
-      dispatch(clearAuthMessage({ key: "logout" }));
-      dispatch(clearLoggedUser());
-    }
-  }, [message.logout]);
 
   return (
     <nav

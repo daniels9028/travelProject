@@ -112,8 +112,8 @@ export function NavUser({
 
     toast.success(data.message);
 
-    dispatch(clearAuthMessage({ key: "logout" }));
     dispatch(clearLoggedUser());
+    dispatch(clearAuthMessage({ key: "logout" }));
   };
 
   useEffect(() => {
